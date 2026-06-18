@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz práctica — Cuestionario 1 · GA2-240202501</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;min-height:100vh;color:#1a202c;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:block;}
+
+/* ── INTRO ── */
+#screen-intro{display:flex;align-items:center;justify-content:center;padding:2rem;}
+.intro-wrap{background:white;border-radius:16px;border:1px solid #e2e8f0;padding:2.5rem;max-width:560px;width:100%;}
+.intro-badge{display:inline-block;background:#f0faf0;color:#276749;border:1px solid #c6f6d5;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:600;margin-bottom:1rem;}
+.intro-title{font-size:1.5rem;font-weight:700;margin-bottom:0.3rem;}
+.intro-sub{color:#718096;font-size:0.88rem;margin-bottom:1.5rem;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem;}
+.info-box{background:#f7fafc;border-radius:10px;padding:0.9rem;text-align:center;}
+.info-num{font-size:1.6rem;font-weight:700;color:#39a900;}
+.info-lbl{font-size:0.75rem;color:#718096;margin-top:2px;}
+.topic-list{list-style:none;margin-bottom:1.8rem;}
+.topic-list li{padding:5px 0;font-size:0.88rem;color:#2d3748;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f7fafc;}
+.topic-list li:last-child{border:none;}
+.topic-dot{width:8px;height:8px;border-radius:50%;background:#39a900;flex-shrink:0;}
+.btn-start{width:100%;background:#39a900;color:white;border:none;border-radius:10px;padding:0.9rem;font-size:1rem;font-weight:600;cursor:pointer;transition:background 0.15s;}
+.btn-start:hover{background:#2d8500;}
+.back-link{display:block;text-align:center;margin-top:1rem;font-size:0.82rem;color:#718096;text-decoration:none;}
+.back-link:hover{color:#39a900;}
+
+/* ── QUIZ HEADER ── */
+.quiz-header{background:white;border-bottom:1px solid #e2e8f0;padding:0.85rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:10;}
+.header-meta{flex-shrink:0;}
+.header-meta .code{font-size:0.68rem;color:#718096;}
+.header-meta .title{font-size:0.85rem;font-weight:600;}
+.prog-wrap{flex:1;}
+.prog-bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;}
+.prog-fill{height:6px;background:#39a900;border-radius:3px;transition:width 0.3s;width:0%;}
+.prog-lbl{font-size:0.72rem;color:#718096;margin-top:3px;}
+.timer-box{font-size:1.05rem;font-weight:700;color:#276749;font-variant-numeric:tabular-nums;background:#f0fff4;border:1px solid #c6f6d5;border-radius:8px;padding:4px 12px;white-space:nowrap;}
+.timer-box.warn{color:#c05621;background:#fffaf0;border-color:#fbd38d;}
+.timer-box.danger{color:#c53030;background:#fff5f5;border-color:#fed7d7;}
+
+/* ── QUIZ BODY ── */
+.quiz-body{display:grid;grid-template-columns:1fr 200px;min-height:calc(100vh - 60px);}
+@media(max-width:680px){.quiz-body{grid-template-columns:1fr;}}
+.q-main{padding:1.5rem;}
+.q-sidebar{background:white;border-left:1px solid #e2e8f0;padding:1.2rem;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+
+/* ── QUESTION CARD ── */
+.q-card{background:white;border-radius:12px;border:1px solid #e2e8f0;padding:1.5rem 1.6rem;margin-bottom:1rem;}
+.q-num-label{font-size:0.72rem;color:#718096;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.6rem;}
+.q-text{font-size:1rem;line-height:1.65;color:#1a202c;margin-bottom:1.3rem;white-space:pre-wrap;}
+.blank{display:inline-block;background:#e2e8f0;min-width:90px;height:18px;border-radius:3px;vertical-align:middle;margin:0 3px;}
+
+/* ── READING BOX ── */
+.reading-box{background:#f7fafc;border:1px solid #e2e8f0;border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:1rem;font-size:0.86rem;line-height:1.75;color:#2d3748;max-height:240px;overflow-y:auto;}
+.reading-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:#718096;font-weight:700;margin-bottom:0.6rem;}
+.reading-box p{margin-bottom:0.7rem;}
+.reading-box p:last-child{margin:0;}
+
+/* ── OPTIONS ── */
+.options{display:flex;flex-direction:column;gap:8px;}
+.opt-btn{background:white;border:1.5px solid #e2e8f0;border-radius:9px;padding:0.75rem 1rem;text-align:left;cursor:pointer;font-size:0.92rem;color:#2d3748;transition:all 0.15s;display:flex;align-items:center;gap:10px;width:100%;}
+.opt-btn:hover:not(:disabled){border-color:#39a900;background:#f6fff2;}
+.opt-btn.selected{border-color:#39a900;background:#f6fff2;color:#276749;}
+.opt-btn.correct{border-color:#38a169!important;background:#f0fff4!important;color:#276749!important;}
+.opt-btn.wrong{border-color:#e53e3e!important;background:#fff5f5!important;color:#c53030!important;}
+.opt-btn:disabled{cursor:default;}
+.opt-letter{min-width:24px;height:24px;border-radius:50%;border:1.5px solid #cbd5e0;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;color:#718096;}
+.opt-btn.selected .opt-letter,.opt-btn.correct .opt-letter{border-color:currentColor;color:inherit;}
+.opt-btn.wrong .opt-letter{border-color:currentColor;color:inherit;}
+
+/* True/False */
+.tf-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tf-btn{background:white;border:1.5px solid #e2e8f0;border-radius:9px;padding:0.9rem;text-align:center;cursor:pointer;font-size:0.92rem;color:#2d3748;transition:all 0.15s;font-weight:500;}
+.tf-btn:hover:not(:disabled){border-color:#39a900;background:#f6fff2;}
+.tf-btn.selected{border-color:#39a900;background:#f6fff2;color:#276749;}
+.tf-btn.correct{border-color:#38a169!important;background:#f0fff4!important;color:#276749!important;}
+.tf-btn.wrong{border-color:#e53e3e!important;background:#fff5f5!important;color:#c53030!important;}
+.tf-btn:disabled{cursor:default;}
+
+/* ── EXPLANATION ── */
+.explanation{background:#fffbeb;border:1px solid #fbd38d;border-radius:8px;padding:0.8rem 1rem;font-size:0.84rem;color:#744210;margin-top:1rem;display:none;}
+.explanation.show{display:block;}
+.exp-label{font-weight:700;margin-bottom:2px;font-size:0.75rem;text-transform:uppercase;}
+
+/* ── NAV BUTTONS ── */
+.q-nav{display:flex;justify-content:space-between;gap:1rem;margin-top:0.5rem;}
+.btn{padding:0.6rem 1.4rem;border-radius:8px;font-size:0.9rem;font-weight:500;cursor:pointer;border:1.5px solid;transition:all 0.15s;}
+.btn-sec{background:white;border-color:#e2e8f0;color:#4a5568;}
+.btn-sec:hover{border-color:#a0aec0;}
+.btn-pri{background:#39a900;border-color:#39a900;color:white;}
+.btn-pri:hover{background:#2d8500;}
+.btn-end{background:#c53030;border-color:#c53030;color:white;}
+.btn-end:hover{background:#9b2c2c;}
+.btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* ── Q MAP SIDEBAR ── */
+.map-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:#718096;margin-bottom:0.7rem;font-weight:700;}
+.q-map{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1rem;}
+.qd{width:30px;height:30px;border-radius:6px;border:1.5px solid #e2e8f0;font-size:0.72rem;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#718096;transition:all 0.15s;}
+.qd:hover{border-color:#a0aec0;}
+.qd.cur{border-color:#39a900;background:#f6fff2;color:#276749;}
+.qd.ans{background:#39a900;border-color:#39a900;color:white;}
+.qd.read-type{border-color:#805ad5;}
+.qd.read-type.ans{background:#805ad5;border-color:#805ad5;}
+.qd.read-type.cur{border-color:#805ad5;background:#faf5ff;color:#553c9a;}
+.map-legend{font-size:0.72rem;color:#718096;line-height:1.8;}
+.leg-dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px;}
+
+/* ── RESULTS ── */
+#screen-results{padding:2rem;display:none;}
+#screen-results.active{display:block;}
+.results-wrap{max-width:700px;margin:0 auto;}
+.results-top{background:white;border-radius:16px;border:1px solid #e2e8f0;padding:2rem;text-align:center;margin-bottom:1.5rem;}
+.score-big{font-size:4rem;font-weight:700;line-height:1;}
+.score-lbl{color:#718096;font-size:0.9rem;margin-top:0.3rem;}
+.score-bar{max-width:300px;margin:1.2rem auto;height:12px;background:#e2e8f0;border-radius:6px;overflow:hidden;}
+.score-bar-fill{height:12px;border-radius:6px;transition:width 1s;}
+.score-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;max-width:340px;margin:1rem auto 0;}
+.stat-box{background:#f7fafc;border-radius:8px;padding:0.7rem;text-align:center;}
+.stat-n{font-size:1.4rem;font-weight:700;}
+.stat-l{font-size:0.72rem;color:#718096;}
+.stat-correct{color:#276749;}
+.stat-wrong{color:#c53030;}
+.stat-skip{color:#718096;}
+.results-actions{display:flex;gap:10px;justify-content:center;margin-top:1.5rem;}
+.review-title{font-weight:700;font-size:1rem;margin-bottom:1rem;color:#2d3748;}
+.review-item{background:white;border-radius:10px;border:1px solid #e2e8f0;padding:1rem 1.1rem;margin-bottom:0.7rem;}
+.review-item.ok{border-left:4px solid #38a169;}
+.review-item.bad{border-left:4px solid #e53e3e;}
+.review-item.skip{border-left:4px solid #a0aec0;}
+.review-qtext{font-size:0.88rem;color:#2d3748;margin-bottom:0.4rem;white-space:pre-wrap;}
+.review-ans{font-size:0.82rem;margin-bottom:0.3rem;}
+.review-exp{font-size:0.8rem;color:#744210;background:#fffbeb;border-radius:6px;padding:0.4rem 0.7rem;margin-top:0.4rem;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ INTRO ═══════════════════════════ -->
+<div class="screen active" id="screen-intro">
+  <div id="screen-intro-inner" style="display:flex;align-items:center;justify-content:center;padding:2rem;min-height:100vh;">
+    <div class="intro-wrap">
+      <span class="intro-badge">GA2-240202501-AA1-EV01</span>
+      <div class="intro-title">Quiz de práctica</div>
+      <div class="intro-sub">Cuestionario 1 — Nivel 2 · Inglés SENA</div>
+
+      <div class="info-grid">
+        <div class="info-box"><div class="info-num">15</div><div class="info-lbl">Preguntas por intento</div></div>
+        <div class="info-box"><div class="info-num">30</div><div class="info-lbl">Banco total de preguntas</div></div>
+        <div class="info-box"><div class="info-num">2 h</div><div class="info-lbl">Tiempo límite (igual al real)</div></div>
+        <div class="info-box"><div class="info-num">100</div><div class="info-lbl">Puntos máximos</div></div>
+      </div>
+
+      <ul class="topic-list">
+        <li><span class="topic-dot"></span>Pasado simple — verbos irregulares (go→went, see→saw…)</li>
+        <li><span class="topic-dot"></span>Pasado simple — verbos regulares (enjoy→enjoyed…)</li>
+        <li><span class="topic-dot"></span>Preguntas y negaciones en pasado (Did / didn't)</li>
+        <li><span class="topic-dot"></span>Respuestas cortas (Yes, I did / No, she didn't)</li>
+        <li><span class="topic-dot"></span>Preposiciones de lugar (in, on, between, next to…)</li>
+        <li><span class="topic-dot" style="background:#805ad5;"></span>Comprensión lectora — Verdadero / Falso (5 preguntas)</li>
+      </ul>
+
+      <button class="btn-start" onclick="startQuiz()">Iniciar práctica</button>
+      <a class="back-link" href="english-ga2-guide.html">← Volver a la guía principal</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ QUIZ ═══════════════════════════ -->
+<div class="screen" id="screen-quiz">
+  <header class="quiz-header">
+    <div class="header-meta">
+      <div class="code">GA2-240202501-AA1-EV01</div>
+      <div class="title">Quiz de práctica — Cuestionario 1</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-lbl" id="progLbl">Pregunta 1 de 15</div>
+    </div>
+    <div class="timer-box" id="timerBox">2:00:00</div>
+  </header>
+
+  <div class="quiz-body">
+    <div class="q-main" id="qMain"></div>
+    <div class="q-sidebar">
+      <div class="map-title">Mapa de preguntas</div>
+      <div class="q-map" id="qMap"></div>
+      <div class="map-legend">
+        <div><span class="leg-dot" style="background:#39a900;"></span>Respondida</div>
+        <div><span class="leg-dot" style="border:1.5px solid #805ad5;"></span>Comprensión lectora</div>
+      </div>
+      <div style="margin-top:1.5rem;">
+        <button class="btn btn-end" onclick="confirmFinish()" style="width:100%;font-size:0.82rem;">Finalizar quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ RESULTS ═══════════════════════════ -->
+<div class="screen" id="screen-results">
+  <div class="results-wrap" id="resultsWrap" style="padding:2rem;"></div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   BANCO DE PREGUNTAS
+   ══════════════════════════════════════════════════════════ */
+const GRAMMAR = [
+  /* ─ Pasado simple irregular ─ */
+  {q:'She ________ to the market yesterday morning.',opts:['go','goes','went','gone'],ans:2,
+   exp:'"Went" es el pasado simple de "go" (verbo irregular). Los verbos irregulares no añaden -ed.'},
+  {q:'We ________ a beautiful sunset at the beach last Sunday.',opts:['see','saw','seen','seed'],ans:1,
+   exp:'"Saw" es el pasado simple de "see" (verbo irregular).'},
+  {q:'My sister ________ me a birthday card last month.',opts:['send','sended','sent','sending'],ans:2,
+   exp:'"Sent" es el pasado simple de "send" (verbo irregular).'},
+  {q:'They ________ a new house in the countryside two years ago.',opts:['buy','buyed','bought','buying'],ans:2,
+   exp:'"Bought" es el pasado simple de "buy" (verbo irregular).'},
+  {q:'The teacher ________ us an interesting story last Friday.',opts:['tell','telled','told','telling'],ans:2,
+   exp:'"Told" es el pasado simple de "tell" (verbo irregular).'},
+  {q:'I ________ my keys on the kitchen table this morning.',opts:['leave','left','leaved','leaving'],ans:1,
+   exp:'"Left" es el pasado simple de "leave" (verbo irregular).'},
+  {q:'He ________ his bicycle to work every day last month.',opts:['ride','rided','rode','ridden'],ans:2,
+   exp:'"Rode" es el pasado simple de "ride" (verbo irregular).'},
+  {q:'She ________ a beautiful dress to the party last Saturday.',opts:['wear','wore','weared','worn'],ans:1,
+   exp:'"Wore" es el pasado simple de "wear" (verbo irregular).'},
+  {q:'The student ________ the answer correctly on the board.',opts:['write','writed','wrote','written'],ans:2,
+   exp:'"Wrote" es el pasado simple de "write" (verbo irregular).'},
+  {q:'We ________ a lot of delicious food at the restaurant last night.',opts:['eat','eated','ate','eaten'],ans:2,
+   exp:'"Ate" es el pasado simple de "eat" (verbo irregular).'},
+  {q:'The company ________ a new product to the market last year.',opts:['bring','bringed','brung','brought'],ans:3,
+   exp:'"Brought" es el pasado simple de "bring" (verbo irregular).'},
+  /* ─ Pasado simple regular ─ */
+  {q:'They ________ the party a lot last Saturday night.',opts:['enjoy','enjoyed','enjoying','enjoied'],ans:1,
+   exp:'Los verbos regulares añaden -ed en pasado simple. "enjoy" → "enjoyed".'},
+  {q:'She ________ very hard for her English exam last week.',opts:['study','studyed','studied','studying'],ans:2,
+   exp:'Verbos terminados en consonante + y: cambia la y por i y añade -ed. "study" → "studied".'},
+  {q:'The mechanic ________ our car in just one hour.',opts:['fix','fixd','fixing','fixed'],ans:3,
+   exp:'Los verbos regulares añaden -ed en pasado simple. "fix" → "fixed".'},
+  {q:'My parents ________ in this city for ten years before moving.',opts:['live','living','livved','lived'],ans:3,
+   exp:'Verbos que terminan en -e silenciosa solo añaden -d. "live" → "lived".'},
+  /* ─ Preguntas en pasado (Did) ─ */
+  {q:'________ your friend call you last night?',opts:['Was','Did','Has','Were'],ans:1,
+   exp:'Usamos "Did" para formar preguntas en pasado simple con todos los sujetos.'},
+  {q:'________ they arrive on time to the concert?',opts:['Has','Were','Did','Have'],ans:2,
+   exp:'Para preguntas en pasado simple: Did + sujeto + verbo en forma base.'},
+  {q:'________ she win the competition last year?',opts:['Was','Did','Has','Is'],ans:1,
+   exp:'"Did" se usa con todos los sujetos para preguntas en pasado simple.'},
+  /* ─ Negaciones en pasado (didn't) ─ */
+  {q:"I didn't ________ coffee this morning.",opts:['drink','drank','drunk','drinking'],ans:0,
+   exp:"Después de \"didn't\", el verbo va en su forma base (infinitivo), no en pasado."},
+  {q:"She didn't ________ to the gym yesterday.",opts:['went','go','gone','going'],ans:1,
+   exp:"Después de \"didn't\", el verbo va en su forma base. \"went\" es incorrecto aquí."},
+  {q:"They didn't ________ the instructions carefully.",opts:['reads','readed','reading','read'],ans:3,
+   exp:"Después de \"didn't\", el verbo va en su forma base. \"read\" es igual en presente y pasado."},
+  /* ─ Respuestas cortas ─ */
+  {q:'Did you visit your family last weekend?\n— ________',opts:['Yes, I visited.','Yes, I did.','Yes, I have.','Yes, I was.'],ans:1,
+   exp:'La respuesta corta afirmativa a "Did you…?" es "Yes, I did." No se repite el verbo completo.'},
+  {q:'Did she finish the report on time?\n— ________',opts:["No, she didn't.",'No, she wasn\'t.','No, she hasn\'t.',"No, she don't."],ans:0,
+   exp:'La respuesta corta negativa a "Did she…?" es "No, she didn\'t."'},
+  /* ─ Preposiciones de lugar ─ */
+  {q:'The cat is sleeping ________ the sofa.',opts:['in','on','between','next'],ans:1,
+   exp:'"On" se usa para indicar que algo está encima de una superficie.'},
+  {q:'She put the letter ________ the envelope.',opts:['on','between','next','in'],ans:3,
+   exp:'"In" se usa cuando algo está dentro de algo.'},
+  {q:'The keys are ________ the table and the lamp.',opts:['on','in','between','behind'],ans:2,
+   exp:'"Between" indica posición en el medio de dos cosas o personas.'},
+  {q:'There is a pharmacy ________ this building.',opts:['on','in','next to','between'],ans:2,
+   exp:'"Next to" significa "al lado de" algo. Se usa junto con el objeto de referencia.'},
+  {q:'There is a dog ________ the door — you cannot see it.',opts:['on','behind','next to','in'],ans:1,
+   exp:'"Behind" significa "detrás de" algo.'},
+  {q:'My office is ________ the third floor.',opts:['in','at','between','on'],ans:3,
+   exp:'"On" + número de piso es la estructura correcta en inglés.'},
+  {q:'The supermarket is ________ the school — about 2 km away.',opts:['on','in','next to','near'],ans:3,
+   exp:'"Near" significa "cerca de" algo, pero no inmediatamente al lado. "Next to" implica contacto directo.'}
+];
+
+/* ─ Texto de comprensión lectora (diferente al examen real) ─ */
+const READING_TEXT = `<p>Smartphones have completely changed the way we communicate and access information. Most people today carry a powerful mini-computer in their pocket every single day.</p>
+<p>Apple is a well-known technology company that created the iPhone. The first iPhone was launched in 2007, and it changed the mobile phone industry forever. Today, Apple sells millions of iPhones in countries around the world every year.</p>
+<p>Social media applications like Instagram and WhatsApp are very popular on smartphones. People use these apps to share photos, short videos, and messages with friends and family. Studies show that some people spend more than three hours every day using social media on their devices.</p>
+<p>Smartphones also help people find their way around. With a GPS application, you can locate any address, see traffic conditions in real time, and receive step-by-step directions to your destination. Many people no longer use paper maps because their smartphone can guide them anywhere.</p>
+<p>However, health experts warn that too much screen time can have negative effects. Studies show that using smartphones late at night can affect the quality of sleep, especially in children and teenagers.</p>`;
+
+const READING_QS = [
+  {q:'The first iPhone was launched in 2010.',ans:false,
+   exp:'Falso. Según el texto, el primer iPhone fue lanzado en 2007, no en 2010.'},
+  {q:'Apple sells iPhones in countries around the world.',ans:true,
+   exp:'Verdadero. El texto dice "Apple sells millions of iPhones in countries around the world every year."'},
+  {q:'WhatsApp is a social media application.',ans:true,
+   exp:'Verdadero. El texto menciona WhatsApp como ejemplo de aplicación de redes sociales.'},
+  {q:'Smartphones can help you find directions with GPS.',ans:true,
+   exp:'Verdadero. El texto explica que con una app de GPS puedes encontrar direcciones paso a paso.'},
+  {q:'Most people spend less than one hour per day on social media.',ans:false,
+   exp:'Falso. El texto dice que algunas personas pasan más de tres horas al día en redes sociales.'},
+  {q:'Health experts say smartphones have no negative effects on sleep.',ans:false,
+   exp:'Falso. El texto advierte que usar smartphones de noche puede afectar la calidad del sueño.'},
+  {q:'Paper maps are more popular than GPS apps today.',ans:false,
+   exp:'Falso. El texto dice que mucha gente ya no usa mapas de papel porque el smartphone los guía.'},
+  {q:'The article mentions that screen time can affect sleep.',ans:true,
+   exp:'Verdadero. El texto menciona explícitamente que el tiempo de pantalla puede afectar el sueño.'},
+  {q:'The iPhone was created by the Samsung company.',ans:false,
+   exp:'Falso. El texto indica claramente que Apple (no Samsung) creó el iPhone.'},
+  {q:'People can share photos on Instagram.',ans:true,
+   exp:'Verdadero. El texto dice que la gente usa apps como Instagram para compartir fotos.'}
+];
+
+/* ══════════════════════════════════════════════════════════
+   ESTADO DEL QUIZ
+   ══════════════════════════════════════════════════════════ */
+let quizQ = [];
+let cur = 0;
+let answers = {};
+let timeLeft = 7200;
+let timerInt = null;
+let revealed = {};
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  const gq = shuffle(GRAMMAR).slice(0, 10).map(q => ({...q, type: 'mc'}));
+  const rq = shuffle(READING_QS).slice(0, 5).map(q => ({...q, type: 'tf'}));
+  quizQ = [...gq, ...rq];
+  cur = 0;
+  answers = {};
+  revealed = {};
+  timeLeft = 7200;
+
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  document.getElementById('screen-results').classList.remove('active');
+
+  renderMap();
+  renderQuestion();
+  startTimer();
+}
+
+/* ── Timer ── */
+function startTimer() {
+  clearInterval(timerInt);
+  timerInt = setInterval(() => {
+    timeLeft--;
+    const box = document.getElementById('timerBox');
+    const h = Math.floor(timeLeft / 3600);
+    const m = Math.floor((timeLeft % 3600) / 60);
+    const s = timeLeft % 60;
+    box.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    box.className = 'timer-box';
+    if (timeLeft <= 300) box.classList.add('danger');
+    else if (timeLeft <= 900) box.classList.add('warn');
+    if (timeLeft <= 0) { clearInterval(timerInt); finishQuiz(); }
+  }, 1000);
+}
+
+/* ── Map ── */
+function renderMap() {
+  const map = document.getElementById('qMap');
+  map.innerHTML = '';
+  quizQ.forEach((q, i) => {
+    const d = document.createElement('div');
+    d.className = 'qd' + (q.type === 'tf' ? ' read-type' : '') + (i === cur ? ' cur' : '') + (answers[i] !== undefined ? ' ans' : '');
+    d.textContent = i + 1;
+    d.onclick = () => goTo(i);
+    map.appendChild(d);
+  });
+}
+
+function goTo(idx) { cur = idx; renderQuestion(); renderMap(); }
+
+/* ── Render question ── */
+function renderQuestion() {
+  const q = quizQ[cur];
+  const total = quizQ.length;
+  document.getElementById('progFill').style.width = ((cur / total) * 100) + '%';
+  document.getElementById('progLbl').textContent = `Pregunta ${cur + 1} de ${total}`;
+
+  let html = '';
+
+  /* Reading text for T/F questions */
+  if (q.type === 'tf') {
+    html += `<div class="reading-box"><div class="reading-label">📖 Texto de comprensión — léelo antes de responder</div>${READING_TEXT}</div>`;
+  }
+
+  /* Question card */
+  html += `<div class="q-card">`;
+  html += `<div class="q-num-label">Pregunta ${cur + 1} de ${total}${q.type==='tf' ? ' · Comprensión lectora' : ''}</div>`;
+
+  if (q.type === 'mc') {
+    const displayQ = q.q.replace(/________/g, '<span class="blank"></span>');
+    html += `<div class="q-text">${displayQ}</div>`;
+    html += `<div class="options">`;
+    const letters = ['a','b','c','d'];
+    q.opts.forEach((opt, i) => {
+      let cls = 'opt-btn';
+      if (revealed[cur]) {
+        if (i === q.ans) cls += ' correct';
+        else if (answers[cur] === i && i !== q.ans) cls += ' wrong';
+      } else if (answers[cur] === i) cls += ' selected';
+      const dis = revealed[cur] ? 'disabled' : '';
+      html += `<button class="${cls}" onclick="selectMC(${i})" ${dis}><span class="opt-letter">${letters[i]}</span>${opt}</button>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div class="q-text">${q.q}</div>`;
+    html += `<div class="tf-options">`;
+    ['true','false'].forEach((val, i) => {
+      const isTrue = val === 'true';
+      let cls = 'tf-btn';
+      if (revealed[cur]) {
+        if (isTrue === q.ans) cls += ' correct';
+        else if (answers[cur] === isTrue && isTrue !== q.ans) cls += ' wrong';
+      } else if (answers[cur] === isTrue) cls += ' selected';
+      const dis = revealed[cur] ? 'disabled' : '';
+      html += `<button class="${cls}" onclick="selectTF(${isTrue})" ${dis}>${isTrue ? 'Verdadero' : 'Falso'}</button>`;
+    });
+    html += `</div>`;
+  }
+
+  /* Explanation */
+  const expShow = revealed[cur] ? ' show' : '';
+  html += `<div class="explanation${expShow}"><div class="exp-label">💡 Explicación</div>${q.exp}</div>`;
+  html += `</div>`;
+
+  /* Navigation */
+  html += `<div class="q-nav">`;
+  html += `<button class="btn btn-sec" onclick="navQ(-1)" ${cur === 0 ? 'disabled' : ''}>← Anterior</button>`;
+  if (!revealed[cur] && answers[cur] !== undefined) {
+    html += `<button class="btn btn-pri" onclick="checkAnswer()">Verificar respuesta</button>`;
+  } else if (!revealed[cur]) {
+    html += `<button class="btn btn-pri" disabled>Selecciona una opción</button>`;
+  } else if (cur < total - 1) {
+    html += `<button class="btn btn-pri" onclick="navQ(1)">Siguiente →</button>`;
+  } else {
+    html += `<button class="btn btn-end" onclick="confirmFinish()">Ver resultados</button>`;
+  }
+  html += `</div>`;
+
+  document.getElementById('qMain').innerHTML = html;
+}
+
+function selectMC(i) {
+  if (revealed[cur]) return;
+  answers[cur] = i;
+  renderQuestion();
+  renderMap();
+}
+
+function selectTF(val) {
+  if (revealed[cur]) return;
+  answers[cur] = val;
+  renderQuestion();
+  renderMap();
+}
+
+function checkAnswer() {
+  revealed[cur] = true;
+  renderQuestion();
+  renderMap();
+}
+
+function navQ(dir) {
+  const next = cur + dir;
+  if (next >= 0 && next < quizQ.length) { cur = next; renderQuestion(); renderMap(); }
+}
+
+function confirmFinish() {
+  const unanswered = quizQ.filter((_, i) => answers[i] === undefined).length;
+  if (unanswered > 0) {
+    if (!confirm(`Tienes ${unanswered} pregunta(s) sin responder. ¿Deseas finalizar de todas formas?`)) return;
+  }
+  finishQuiz();
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESULTS
+   ══════════════════════════════════════════════════════════ */
+function finishQuiz() {
+  clearInterval(timerInt);
+  let correct = 0;
+  let wrong = 0;
+  let skipped = 0;
+
+  quizQ.forEach((q, i) => {
+    const a = answers[i];
+    if (a === undefined) { skipped++; return; }
+    const isCorrect = q.type === 'mc' ? a === q.ans : a === q.ans;
+    if (isCorrect) correct++; else wrong++;
+  });
+
+  const pct = Math.round((correct / quizQ.length) * 100);
+  const scoreColor = pct >= 70 ? '#38a169' : pct >= 50 ? '#d69e2e' : '#e53e3e';
+  const scoreMsg = pct >= 70 ? '¡Muy bien! Estás listo/a para el cuestionario.' : pct >= 50 ? 'Vas por buen camino. Repasa los temas con error.' : 'Necesitas más práctica. Revisa los materiales de estudio.';
+
+  let html = `
+    <div class="results-top">
+      <div style="font-size:0.8rem;color:#718096;margin-bottom:0.3rem;">Resultado final</div>
+      <div class="score-big" style="color:${scoreColor};">${pct}<span style="font-size:2rem;">%</span></div>
+      <div class="score-lbl">${correct} correctas · ${wrong} incorrectas · ${skipped} sin responder</div>
+      <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%;background:${scoreColor};"></div></div>
+      <div style="font-size:0.88rem;color:#4a5568;margin-top:0.7rem;">${scoreMsg}</div>
+      <div class="score-stats">
+        <div class="stat-box"><div class="stat-n stat-correct">${correct}</div><div class="stat-l">Correctas</div></div>
+        <div class="stat-box"><div class="stat-n stat-wrong">${wrong}</div><div class="stat-l">Incorrectas</div></div>
+        <div class="stat-box"><div class="stat-n stat-skip">${skipped}</div><div class="stat-l">Sin responder</div></div>
+      </div>
+      <div class="results-actions">
+        <button class="btn btn-pri" onclick="startQuiz()">Intentar de nuevo (nuevas preguntas)</button>
+        <a class="btn btn-sec" href="english-ga2-guide.html" style="text-decoration:none;display:inline-flex;align-items:center;">← Volver a la guía</a>
+      </div>
+    </div>
+    <div class="review-title">Revisión de respuestas</div>`;
+
+  quizQ.forEach((q, i) => {
+    const a = answers[i];
+    const isCorrect = a !== undefined && (q.type === 'mc' ? a === q.ans : a === q.ans);
+    const cls = a === undefined ? 'skip' : isCorrect ? 'ok' : 'bad';
+    const icon = a === undefined ? '⬜' : isCorrect ? '✅' : '❌';
+    const displayQ = q.type === 'mc' ? q.q.replace(/________/g, '___') : q.q;
+
+    let answerLine = '';
+    if (q.type === 'mc') {
+      const letters = ['a','b','c','d'];
+      const correctAns = `<span style="color:#276749;font-weight:600;">${letters[q.ans]}. ${q.opts[q.ans]}</span>`;
+      if (a === undefined) answerLine = `<div class="review-ans">Sin responder · Respuesta correcta: ${correctAns}</div>`;
+      else if (isCorrect) answerLine = `<div class="review-ans" style="color:#276749;">Tu respuesta: ${letters[a]}. ${q.opts[a]} ✓</div>`;
+      else answerLine = `<div class="review-ans"><span style="color:#c53030;">Tu respuesta: ${letters[a]}. ${q.opts[a]} ✗</span> · Correcta: ${correctAns}</div>`;
+    } else {
+      const correctAns = `<span style="color:#276749;font-weight:600;">${q.ans ? 'Verdadero' : 'Falso'}</span>`;
+      if (a === undefined) answerLine = `<div class="review-ans">Sin responder · Respuesta correcta: ${correctAns}</div>`;
+      else if (isCorrect) answerLine = `<div class="review-ans" style="color:#276749;">Tu respuesta: ${a ? 'Verdadero' : 'Falso'} ✓</div>`;
+      else answerLine = `<div class="review-ans"><span style="color:#c53030;">Tu respuesta: ${a ? 'Verdadero' : 'Falso'} ✗</span> · Correcta: ${correctAns}</div>`;
+    }
+
+    html += `
+      <div class="review-item ${cls}">
+        <div class="review-qtext">${icon} <strong>P${i+1}.</strong> ${displayQ}</div>
+        ${answerLine}
+        <div class="review-exp">💡 ${q.exp}</div>
+      </div>`;
+  });
+
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  document.getElementById('resultsWrap').innerHTML = html;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz práctica — Cuestionario 2 · GA2-240202501</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;min-height:100vh;color:#1a202c;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:block;}
+
+/* ── INTRO ── */
+#screen-intro{display:flex;align-items:center;justify-content:center;padding:2rem;}
+.intro-wrap{background:white;border-radius:16px;border:1px solid #e2e8f0;padding:2.5rem;max-width:560px;width:100%;}
+.intro-badge{display:inline-block;background:#f0faf0;color:#276749;border:1px solid #c6f6d5;border-radius:6px;padding:3px 10px;font-size:0.72rem;font-weight:600;margin-bottom:1rem;}
+.intro-title{font-size:1.5rem;font-weight:700;margin-bottom:0.3rem;}
+.intro-sub{color:#718096;font-size:0.88rem;margin-bottom:1.5rem;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem;}
+.info-box{background:#f7fafc;border-radius:10px;padding:0.9rem;text-align:center;}
+.info-num{font-size:1.6rem;font-weight:700;color:#39a900;}
+.info-lbl{font-size:0.75rem;color:#718096;margin-top:2px;}
+.topic-list{list-style:none;margin-bottom:1.8rem;}
+.topic-list li{padding:5px 0;font-size:0.88rem;color:#2d3748;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f7fafc;}
+.topic-list li:last-child{border:none;}
+.topic-dot{width:8px;height:8px;border-radius:50%;background:#39a900;flex-shrink:0;}
+.btn-start{width:100%;background:#39a900;color:white;border:none;border-radius:10px;padding:0.9rem;font-size:1rem;font-weight:600;cursor:pointer;transition:background 0.15s;}
+.btn-start:hover{background:#2d8500;}
+.back-link{display:block;text-align:center;margin-top:1rem;font-size:0.82rem;color:#718096;text-decoration:none;}
+.back-link:hover{color:#39a900;}
+
+/* ── QUIZ HEADER ── */
+.quiz-header{background:white;border-bottom:1px solid #e2e8f0;padding:0.85rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:10;}
+.header-meta .code{font-size:0.68rem;color:#718096;}
+.header-meta .title{font-size:0.85rem;font-weight:600;}
+.prog-wrap{flex:1;}
+.prog-bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;}
+.prog-fill{height:6px;background:#39a900;border-radius:3px;transition:width 0.3s;width:0%;}
+.prog-lbl{font-size:0.72rem;color:#718096;margin-top:3px;}
+.timer-box{font-size:1.05rem;font-weight:700;color:#276749;font-variant-numeric:tabular-nums;background:#f0fff4;border:1px solid #c6f6d5;border-radius:8px;padding:4px 12px;white-space:nowrap;}
+.timer-box.warn{color:#c05621;background:#fffaf0;border-color:#fbd38d;}
+.timer-box.danger{color:#c53030;background:#fff5f5;border-color:#fed7d7;}
+
+/* ── QUIZ BODY ── */
+.quiz-body{display:grid;grid-template-columns:1fr 200px;min-height:calc(100vh - 60px);}
+@media(max-width:680px){.quiz-body{grid-template-columns:1fr;}}
+.q-main{padding:1.5rem;}
+.q-sidebar{background:white;border-left:1px solid #e2e8f0;padding:1.2rem;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+
+/* ── SECTION LABELS ── */
+.section-label{display:inline-block;font-size:0.72rem;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:0.8rem;}
+.lbl-scramble{background:#ebf8ff;color:#2b6cb0;}
+.lbl-fill{background:#faf5ff;color:#553c9a;}
+.lbl-reading{background:#f0fff4;color:#276749;}
+
+/* ── QUESTION CARD ── */
+.q-card{background:white;border-radius:12px;border:1px solid #e2e8f0;padding:1.5rem 1.6rem;margin-bottom:1rem;}
+.q-num-label{font-size:0.72rem;color:#718096;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.6rem;}
+.q-text{font-size:1rem;line-height:1.65;color:#1a202c;margin-bottom:1.3rem;}
+.q-instruction{font-size:0.83rem;color:#4a5568;background:#f7fafc;border-radius:6px;padding:0.5rem 0.8rem;margin-bottom:0.9rem;font-style:italic;}
+.blank{display:inline-block;background:#e2e8f0;min-width:90px;height:18px;border-radius:3px;vertical-align:middle;margin:0 3px;}
+.scramble-words{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem;}
+.word-pill{background:#ebf8ff;color:#2b6cb0;border:1px solid #bee3f8;border-radius:20px;padding:3px 10px;font-size:0.85rem;font-weight:500;}
+
+/* ── OPTIONS ── */
+.options{display:flex;flex-direction:column;gap:8px;}
+.opt-btn{background:white;border:1.5px solid #e2e8f0;border-radius:9px;padding:0.75rem 1rem;text-align:left;cursor:pointer;font-size:0.92rem;color:#2d3748;transition:all 0.15s;display:flex;align-items:center;gap:10px;width:100%;}
+.opt-btn:hover:not(:disabled){border-color:#39a900;background:#f6fff2;}
+.opt-btn.selected{border-color:#39a900;background:#f6fff2;color:#276749;}
+.opt-btn.correct{border-color:#38a169!important;background:#f0fff4!important;color:#276749!important;}
+.opt-btn.wrong{border-color:#e53e3e!important;background:#fff5f5!important;color:#c53030!important;}
+.opt-btn:disabled{cursor:default;}
+.opt-letter{min-width:24px;height:24px;border-radius:50%;border:1.5px solid #cbd5e0;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;color:#718096;}
+.opt-btn.selected .opt-letter,.opt-btn.correct .opt-letter{border-color:currentColor;color:inherit;}
+.opt-btn.wrong .opt-letter{border-color:currentColor;color:inherit;}
+
+/* T/F */
+.tf-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tf-btn{background:white;border:1.5px solid #e2e8f0;border-radius:9px;padding:0.9rem;text-align:center;cursor:pointer;font-size:0.92rem;color:#2d3748;transition:all 0.15s;font-weight:500;}
+.tf-btn:hover:not(:disabled){border-color:#39a900;background:#f6fff2;}
+.tf-btn.selected{border-color:#39a900;background:#f6fff2;color:#276749;}
+.tf-btn.correct{border-color:#38a169!important;background:#f0fff4!important;color:#276749!important;}
+.tf-btn.wrong{border-color:#e53e3e!important;background:#fff5f5!important;color:#c53030!important;}
+.tf-btn:disabled{cursor:default;}
+
+/* Multi-select checkboxes */
+.ms-option{display:flex;align-items:flex-start;gap:10px;padding:0.75rem 1rem;border:1.5px solid #e2e8f0;border-radius:9px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;}
+.ms-option:hover:not(.disabled){border-color:#805ad5;background:#faf5ff;}
+.ms-option.selected{border-color:#805ad5;background:#faf5ff;}
+.ms-option.correct{border-color:#38a169!important;background:#f0fff4!important;}
+.ms-option.partial-wrong{border-color:#e53e3e!important;background:#fff5f5!important;}
+.ms-option.disabled{cursor:default;}
+.ms-check{width:20px;height:20px;border-radius:4px;border:1.5px solid #cbd5e0;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.8rem;margin-top:1px;}
+.ms-option.selected .ms-check{background:#805ad5;border-color:#805ad5;color:white;}
+.ms-option.correct .ms-check{background:#38a169;border-color:#38a169;color:white;}
+.ms-option.partial-wrong .ms-check{background:#e53e3e;border-color:#e53e3e;color:white;}
+.ms-text{font-size:0.9rem;color:#2d3748;line-height:1.5;}
+.ms-hint{font-size:0.75rem;color:#718096;margin-top:3px;}
+
+/* ── READING BOX ── */
+.reading-box{background:#f7fafc;border:1px solid #e2e8f0;border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:1rem;font-size:0.86rem;line-height:1.8;color:#2d3748;max-height:220px;overflow-y:auto;}
+.reading-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:#718096;font-weight:700;margin-bottom:0.6rem;}
+.reading-box p{margin-bottom:0.7rem;}
+.reading-box p:last-child{margin:0;}
+
+/* ── EXPLANATION ── */
+.explanation{background:#fffbeb;border:1px solid #fbd38d;border-radius:8px;padding:0.8rem 1rem;font-size:0.84rem;color:#744210;margin-top:1rem;display:none;}
+.explanation.show{display:block;}
+.exp-label{font-weight:700;margin-bottom:2px;font-size:0.75rem;text-transform:uppercase;}
+
+/* ── NAV ── */
+.q-nav{display:flex;justify-content:space-between;gap:1rem;margin-top:0.5rem;}
+.btn{padding:0.6rem 1.4rem;border-radius:8px;font-size:0.9rem;font-weight:500;cursor:pointer;border:1.5px solid;transition:all 0.15s;}
+.btn-sec{background:white;border-color:#e2e8f0;color:#4a5568;}
+.btn-sec:hover{border-color:#a0aec0;}
+.btn-pri{background:#39a900;border-color:#39a900;color:white;}
+.btn-pri:hover{background:#2d8500;}
+.btn-end{background:#c53030;border-color:#c53030;color:white;}
+.btn-end:hover{background:#9b2c2c;}
+.btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* ── Q MAP ── */
+.map-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:#718096;margin-bottom:0.7rem;font-weight:700;}
+.q-map{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1rem;}
+.qd{width:30px;height:30px;border-radius:6px;border:1.5px solid #e2e8f0;font-size:0.72rem;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#718096;transition:all 0.15s;}
+.qd:hover{border-color:#a0aec0;}
+.qd.cur{border-color:#39a900;background:#f6fff2;color:#276749;}
+.qd.ans{background:#39a900;border-color:#39a900;color:white;}
+.qd.read-type{border-color:#805ad5;}
+.qd.read-type.cur{border-color:#805ad5;background:#faf5ff;color:#553c9a;}
+.qd.read-type.ans{background:#805ad5;border-color:#805ad5;color:white;}
+.qd.ms-type{border-color:#d6bcfa;}
+.qd.ms-type.cur{border-color:#805ad5;background:#faf5ff;color:#553c9a;}
+.qd.ms-type.ans{background:#553c9a;border-color:#553c9a;color:white;}
+.map-legend{font-size:0.72rem;color:#718096;line-height:1.9;}
+.leg-dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:4px;}
+
+/* ── RESULTS ── */
+#screen-results{padding:2rem;display:none;}
+#screen-results.active{display:block;}
+.results-wrap{max-width:700px;margin:0 auto;}
+.results-top{background:white;border-radius:16px;border:1px solid #e2e8f0;padding:2rem;text-align:center;margin-bottom:1.5rem;}
+.score-big{font-size:4rem;font-weight:700;line-height:1;}
+.score-lbl{color:#718096;font-size:0.9rem;margin-top:0.3rem;}
+.score-bar{max-width:300px;margin:1.2rem auto;height:12px;background:#e2e8f0;border-radius:6px;overflow:hidden;}
+.score-bar-fill{height:12px;border-radius:6px;}
+.score-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;max-width:340px;margin:1rem auto 0;}
+.stat-box{background:#f7fafc;border-radius:8px;padding:0.7rem;text-align:center;}
+.stat-n{font-size:1.4rem;font-weight:700;}
+.stat-l{font-size:0.72rem;color:#718096;}
+.results-actions{display:flex;gap:10px;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;}
+.review-title{font-weight:700;font-size:1rem;margin-bottom:1rem;color:#2d3748;}
+.review-item{background:white;border-radius:10px;border:1px solid #e2e8f0;padding:1rem 1.1rem;margin-bottom:0.7rem;}
+.review-item.ok{border-left:4px solid #38a169;}
+.review-item.bad{border-left:4px solid #e53e3e;}
+.review-item.skip{border-left:4px solid #a0aec0;}
+.review-qtext{font-size:0.88rem;color:#2d3748;margin-bottom:0.4rem;}
+.review-ans{font-size:0.82rem;margin-bottom:0.3rem;}
+.review-exp{font-size:0.8rem;color:#744210;background:#fffbeb;border-radius:6px;padding:0.4rem 0.7rem;margin-top:0.4rem;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ INTRO ═══════════════════ -->
+<div class="screen active" id="screen-intro">
+  <div style="display:flex;align-items:center;justify-content:center;padding:2rem;min-height:100vh;">
+    <div class="intro-wrap">
+      <span class="intro-badge">GA2-240202501-AA2-EV01</span>
+      <div class="intro-title">Quiz de práctica</div>
+      <div class="intro-sub">Cuestionario 2 — Nivel 3 · Inglés SENA</div>
+      <div class="info-grid">
+        <div class="info-box"><div class="info-num">15</div><div class="info-lbl">Preguntas por intento</div></div>
+        <div class="info-box"><div class="info-num">30</div><div class="info-lbl">Banco total de preguntas</div></div>
+        <div class="info-box"><div class="info-num">2 h</div><div class="info-lbl">Tiempo límite (igual al real)</div></div>
+        <div class="info-box"><div class="info-num">100</div><div class="info-lbl">Puntos máximos</div></div>
+      </div>
+      <ul class="topic-list">
+        <li><span class="topic-dot" style="background:#2b6cb0;"></span>Oraciones desordenadas — comparativos y superlativos</li>
+        <li><span class="topic-dot" style="background:#553c9a;"></span>Adjetivos -ed / -ing (interesting/interested…)</li>
+        <li><span class="topic-dot"></span>Pasado simple irregular (thought, wrote, sang…)</li>
+        <li><span class="topic-dot"></span>Pasado continuo + simple (was eating / knocked)</li>
+        <li><span class="topic-dot" style="background:#805ad5;"></span>Comprensión lectora — texto de viaje (Verdadero/Falso)</li>
+        <li><span class="topic-dot" style="background:#553c9a;"></span>Selección múltiple — identificar tiempos verbales</li>
+      </ul>
+      <button class="btn-start" onclick="startQuiz()">Iniciar práctica</button>
+      <a class="back-link" href="english-ga2-guide.html">← Volver a la guía principal</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ QUIZ ═══════════════════ -->
+<div class="screen" id="screen-quiz">
+  <header class="quiz-header">
+    <div class="header-meta">
+      <div class="code">GA2-240202501-AA2-EV01</div>
+      <div class="title">Quiz de práctica — Cuestionario 2</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-lbl" id="progLbl">Pregunta 1 de 15</div>
+    </div>
+    <div class="timer-box" id="timerBox">2:00:00</div>
+  </header>
+  <div class="quiz-body">
+    <div class="q-main" id="qMain"></div>
+    <div class="q-sidebar">
+      <div class="map-title">Mapa de preguntas</div>
+      <div class="q-map" id="qMap"></div>
+      <div class="map-legend">
+        <div><span class="leg-dot" style="background:#39a900;"></span>Respondida</div>
+        <div><span class="leg-dot" style="border:1.5px solid #2b6cb0;"></span>Frase ordenada</div>
+        <div><span class="leg-dot" style="border:1.5px solid #d6bcfa;"></span>Comprensión</div>
+      </div>
+      <div style="margin-top:1.5rem;">
+        <button class="btn btn-end" onclick="confirmFinish()" style="width:100%;font-size:0.82rem;">Finalizar quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ RESULTS ═══════════════════ -->
+<div class="screen" id="screen-results">
+  <div class="results-wrap" id="resultsWrap" style="padding:2rem;"></div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   BANCO DE PREGUNTAS
+   ══════════════════════════════════════════════════════════ */
+
+/* ─ Oraciones desordenadas (comparativos / superlativos) ─ */
+const SCRAMBLE_BANK = [
+  {q:'city / the / is / in / modern / most / Paris / the / world',
+   opts:['Paris is the most modern city in the world.','Paris the most modern is city in the world.','The most modern Paris is city in the world.','Paris is city the most modern in the world.'],
+   ans:0, exp:'Estructura: Sujeto + is + the most + adjetivo + complemento. "Paris is the most modern city in the world."'},
+  {q:'running / cycling / is / than / more / tiring',
+   opts:['Running is more tiring than cycling.','Running more is tiring than cycling.','Cycling is more tiring than running.','Running is tiring more than cycling.'],
+   ans:0, exp:'Comparativo: Sujeto + is + more + adjetivo + than + objeto. "Running is more tiring than cycling."'},
+  {q:'summer / the / popular / most / season / is / the',
+   opts:['Summer most is the popular season.','The most popular is summer season.','Summer is the most popular season.','Summer is season the most popular.'],
+   ans:2, exp:'"Summer is the most popular season." → the most popular (superlativo de popular).'},
+  {q:'English / difficult / is / Spanish / than / more',
+   opts:['English more difficult is than Spanish.','Spanish is more difficult than English.','English is difficult more than Spanish.','English is more difficult than Spanish.'],
+   ans:3, exp:'"English is more difficult than Spanish." → comparativo: more + adjetivo + than.'},
+  {q:'interesting / is / book / ever / most / the / I / read / have / this',
+   opts:['This most interesting is the book I have ever read.','This is the most interesting book I have ever read.','The most interesting book this is I have ever read.','This is interesting the most book I have ever read.'],
+   ans:1, exp:'"This is the most interesting book I have ever read." → superlativo con present perfect.'},
+  {q:'technology / the / is / field / most / exciting / in / world / the',
+   opts:['Technology is the most exciting field in the world.','Technology field the most exciting is in the world.','The most exciting is technology field in the world.','Technology is exciting the most field in the world.'],
+   ans:0, exp:'"Technology is the most exciting field in the world." → the most + adjetivo.'},
+  {q:'junk / than / food / eating / healthy / is / less / vegetables',
+   opts:['Junk food is less healthy than eating vegetables.','Eating vegetables is less healthy than junk food.','Eating junk food is less healthy than vegetables.','Less healthy junk food is eating than vegetables.'],
+   ans:2, exp:'"Eating junk food is less healthy than vegetables." → less + adjetivo + than (comparativo de inferioridad).'},
+  {q:'sister / is / than / my / I / stronger',
+   opts:['My sister stronger is than I.','My sister is stronger than I.','I am stronger than my sister.','My sister is than stronger I.'],
+   ans:1, exp:'"My sister is stronger than I." → comparativo: adjetivo corto + -er + than.'},
+  {q:'restaurant / most / the / expensive / in / city / this / the / is',
+   opts:['This the most expensive restaurant is in the city.','This is most the expensive restaurant in the city.','This is the most expensive restaurant in the city.','The most expensive this restaurant is in the city.'],
+   ans:2, exp:'"This is the most expensive restaurant in the city." → the most + adjetivo largo.'},
+  {q:'is / than / warmer / city / the / countryside / the',
+   opts:['The city than the countryside is warmer.','The countryside is warmer than the city.','The city is warmer than the countryside.','The warmer city is than the countryside.'],
+   ans:2, exp:'"The city is warmer than the countryside." → comparativo con adjetivo corto: warm → warmer.'}
+];
+
+/* ─ Completar la oración (adjetivos -ed/-ing + tiempos pasados) ─ */
+const FILL_BANK = [
+  {q:'That movie was very ________ — I couldn\'t stop watching it.',
+   opts:['interested','interesting','interesteing','interestingly'],
+   ans:1, exp:'"Interesting" describe la calidad de la película (cosa). Los adjetivos -ing describen el efecto que algo produce.'},
+  {q:'I was really ________ when I heard the good news.',
+   opts:['exciting','excited','exciteding','excite'],
+   ans:1, exp:'"Excited" describe cómo se siente una persona. Los adjetivos -ed describen sentimientos del sujeto.'},
+  {q:'The science class was quite ________ for the students.',
+   opts:['bored','boreing','boring','boreded'],
+   ans:2, exp:'"Boring" describe la calidad de la clase (cosa). La clase produce aburrimiento.'},
+  {q:'She ________ (think) about the problem all night.',
+   opts:['thought','thinked','thinks','was thought'],
+   ans:0, exp:'"Thought" es el pasado simple de "think" (verbo irregular). Nunca se usa "thinked".'},
+  {q:'He ________ a beautiful poem for the school competition last week.',
+   opts:['writed','write','written','wrote'],
+   ans:3, exp:'"Wrote" es el pasado simple de "write" (verbo irregular).'},
+  {q:'They ________ TV when someone ________ at the window.',
+   opts:['watched / knocked','was watching / knocked','was watching / was knocking','watched / was knocking'],
+   ans:1, exp:'Pasado continuo (acción en curso: was watching) + pasado simple (interrupción: knocked).'},
+  {q:'I ________ my wallet while I ________ to the station.',
+   opts:['lost / was walking','was losing / was walking','lost / walked','was losing / walked'],
+   ans:0, exp:'Pasado simple (acción completada: lost) + pasado continuo (contexto de fondo: was walking).'},
+  {q:'He felt ________ when his friends forgot his birthday.',
+   opts:['disappointing','disappointed','disappoint','disappointedly'],
+   ans:1, exp:'"Disappointed" describe el sentimiento de una persona. Los adjetivos -ed = cómo se siente el sujeto.'},
+  {q:'The lecture was really ________ — I nearly fell asleep!',
+   opts:['bored','boring','boreded','boringly'],
+   ans:1, exp:'"Boring" describe la calidad de la conferencia (cosa). La conferencia produce aburrimiento.'},
+  {q:'She ________ (drink) tea when he ________ (make) her laugh.',
+   opts:['was drinking / make','drank / was making','was drinking / made','drinked / made'],
+   ans:2, exp:'Pasado continuo (acción en curso: was drinking) + pasado simple (interrupción: made).'}
+];
+
+/* ─ Texto de comprensión (diferente al examen real) ─ */
+const READING_TEXT = `<p>Hi everyone! Welcome back to my travel diary. I am finally in Paris! I arrived here two days ago and I have been exploring the city non-stop ever since.</p>
+<p>This morning I visited the Louvre Museum. I think it is one of the greatest art museums in the world. I saw the famous Mona Lisa painting by Leonardo da Vinci. It was smaller than I expected, but still magnificent. The museum building itself is enormous — it used to be a royal palace before it became a museum.</p>
+<p>I also walked along the River Seine and admired the Eiffel Tower from a distance. The tower was built in 1889. It looks even more impressive at night when it is illuminated with thousands of lights.</p>
+<p>Tomorrow I am flying back home to Colombia. I will miss Paris, but I am excited to be back with my family.</p>
+<p>— Carlos</p>`;
+
+/* ─ Pregunta de selección múltiple (siempre incluida) ─ */
+const MS_QUESTION = {
+  type: 'multiselect',
+  q: 'Read the travel diary above. Which sentences are in the PAST TENSE? (There are more than one correct answer)',
+  opts: [
+    {text:'"I think it is one of the greatest art museums in the world."', correct:false, hint:'I think → presente simple'},
+    {text:'"I visited the Louvre Museum this morning."', correct:true, hint:'visited → pasado simple ✓'},
+    {text:'"I saw the famous Mona Lisa painting."', correct:true, hint:'saw → pasado simple ✓'},
+    {text:'"Tomorrow I am flying back home to Colombia."', correct:false, hint:'am flying → presente continuo con valor futuro'}
+  ],
+  exp:'Las oraciones en pasado simple son: "I visited…" (visited = pasado de visit) y "I saw…" (saw = pasado de see). "I think" está en presente y "I am flying" en presente continuo con valor futuro.'
+};
+
+/* ─ Preguntas V/F de comprensión ─ */
+const TF_BANK = [
+  {q:'Carlos arrived in Paris three days ago.',ans:false,exp:'Falso. El texto dice "I arrived here two days ago", no tres días.'},
+  {q:'The Mona Lisa was painted by Leonardo da Vinci.',ans:true,exp:'Verdadero. El texto menciona "the famous Mona Lisa painting by Leonardo da Vinci."'},
+  {q:'Carlos thought the Mona Lisa was bigger than he expected.',ans:false,exp:'Falso. El texto dice "It was smaller than I expected."'},
+  {q:'The Louvre used to be a royal palace.',ans:true,exp:'Verdadero. El texto dice "it used to be a royal palace before it became a museum."'},
+  {q:'Carlos is flying home tomorrow.',ans:true,exp:'Verdadero. El texto dice "Tomorrow I am flying back home to Colombia."'},
+  {q:'The Eiffel Tower was built in 1900.',ans:false,exp:'Falso. El texto dice "The tower was built in 1889", no en 1900.'},
+  {q:'Carlos saw the Eiffel Tower from up close.',ans:false,exp:'Falso. El texto dice "admired the Eiffel Tower from a distance" (desde lejos).'},
+  {q:'Carlos is going back to Colombia.',ans:true,exp:'Verdadero. El texto dice "I am flying back home to Colombia."'},
+  {q:'Carlos thought the Louvre was one of the worst museums in the world.',ans:false,exp:'Falso. Dijo "one of the greatest art museums in the world" (de los mejores, no peores).'},
+  {q:'The Eiffel Tower looks more impressive at night.',ans:true,exp:'Verdadero. El texto dice "It looks even more impressive at night when it is illuminated."'}
+];
+
+/* ══════════════════════════════════════════════════════════
+   ESTADO DEL QUIZ
+   ══════════════════════════════════════════════════════════ */
+let quizQ = [], cur = 0, answers = {}, timeLeft = 7200, timerInt = null, revealed = {};
+let msSelections = {};
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  const scrambled = shuffle(SCRAMBLE_BANK).slice(0, 5).map(q => ({...q, type:'mc', cat:'scramble'}));
+  const fill = shuffle(FILL_BANK).slice(0, 5).map(q => ({...q, type:'mc', cat:'fill'}));
+  const tf = shuffle(TF_BANK).slice(0, 4).map(q => ({...q, type:'tf', cat:'reading'}));
+  quizQ = [...scrambled, ...fill, {...MS_QUESTION, cat:'reading'}, ...tf];
+  cur = 0; answers = {}; revealed = {}; msSelections = {}; timeLeft = 7200;
+
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  document.getElementById('screen-results').classList.remove('active');
+
+  renderMap(); renderQuestion(); startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInt);
+  timerInt = setInterval(() => {
+    timeLeft--;
+    const h = Math.floor(timeLeft / 3600);
+    const m = Math.floor((timeLeft % 3600) / 60);
+    const s = timeLeft % 60;
+    const box = document.getElementById('timerBox');
+    if (!box) return;
+    box.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    box.className = 'timer-box' + (timeLeft <= 300 ? ' danger' : timeLeft <= 900 ? ' warn' : '');
+    if (timeLeft <= 0) { clearInterval(timerInt); finishQuiz(); }
+  }, 1000);
+}
+
+function renderMap() {
+  const map = document.getElementById('qMap');
+  if (!map) return;
+  map.innerHTML = '';
+  quizQ.forEach((q, i) => {
+    const d = document.createElement('div');
+    let cls = 'qd';
+    if (q.cat === 'scramble') cls += ' scr-type';
+    if (q.cat === 'reading' || q.type === 'multiselect') cls += ' read-type';
+    if (q.type === 'multiselect') cls += ' ms-type';
+    if (i === cur) cls += ' cur';
+    if (answers[i] !== undefined && answers[i] !== null) cls += ' ans';
+    d.className = cls;
+    d.textContent = i + 1;
+    d.onclick = () => goTo(i);
+    map.appendChild(d);
+  });
+}
+
+function goTo(idx) { cur = idx; renderQuestion(); renderMap(); }
+
+function getCategory(q) {
+  if (q.cat === 'scramble') return {label:'Ordenar la oración', cls:'lbl-scramble'};
+  if (q.cat === 'fill') return {label:'Completar la oración', cls:'lbl-fill'};
+  return {label:'Comprensión lectora', cls:'lbl-reading'};
+}
+
+function renderQuestion() {
+  const q = quizQ[cur];
+  const total = quizQ.length;
+  document.getElementById('progFill').style.width = ((cur / total) * 100) + '%';
+  document.getElementById('progLbl').textContent = `Pregunta ${cur + 1} de ${total}`;
+
+  const cat = getCategory(q);
+  let html = `<span class="section-label ${cat.cls}">${cat.label}</span>`;
+
+  /* Reading box for reading questions */
+  if (q.cat === 'reading') {
+    html += `<div class="reading-box"><div class="reading-label">📖 Texto de comprensión — léelo antes de responder</div>${READING_TEXT}</div>`;
+  }
+
+  html += `<div class="q-card">`;
+  html += `<div class="q-num-label">Pregunta ${cur + 1} de ${total}</div>`;
+
+  if (q.type === 'mc') {
+    /* Show scrambled words as pills for scramble type */
+    if (q.cat === 'scramble') {
+      html += `<div class="q-instruction">Selecciona el orden correcto de las siguientes palabras:</div>`;
+      html += `<div class="scramble-words">`;
+      q.q.split(' / ').forEach(w => { html += `<span class="word-pill">${w}</span>`; });
+      html += `</div>`;
+    } else {
+      const displayQ = q.q.replace(/________/g, '<span class="blank"></span>');
+      html += `<div class="q-text">${displayQ}</div>`;
+    }
+
+    html += `<div class="options">`;
+    const letters = ['a','b','c','d'];
+    q.opts.forEach((opt, i) => {
+      let cls = 'opt-btn';
+      if (revealed[cur]) {
+        if (i === q.ans) cls += ' correct';
+        else if (answers[cur] === i) cls += ' wrong';
+      } else if (answers[cur] === i) cls += ' selected';
+      const dis = revealed[cur] ? 'disabled' : '';
+      html += `<button class="${cls}" onclick="selectMC(${i})" ${dis}><span class="opt-letter">${letters[i]}</span>${opt}</button>`;
+    });
+    html += `</div>`;
+
+  } else if (q.type === 'tf') {
+    html += `<div class="q-text">${q.q}</div>`;
+    html += `<div class="tf-options">`;
+    [true, false].forEach(val => {
+      let cls = 'tf-btn';
+      if (revealed[cur]) {
+        if (val === q.ans) cls += ' correct';
+        else if (answers[cur] === val && val !== q.ans) cls += ' wrong';
+      } else if (answers[cur] === val) cls += ' selected';
+      const dis = revealed[cur] ? 'disabled' : '';
+      html += `<button class="${cls}" onclick="selectTF(${val})" ${dis}>${val ? 'Verdadero' : 'Falso'}</button>`;
+    });
+    html += `</div>`;
+
+  } else if (q.type === 'multiselect') {
+    html += `<div class="q-text">${q.q}</div>`;
+    const sel = msSelections[cur] || [];
+    q.opts.forEach((opt, i) => {
+      const isSelected = sel.includes(i);
+      let cls = 'ms-option';
+      if (revealed[cur]) {
+        if (opt.correct) cls += ' correct';
+        else if (isSelected && !opt.correct) cls += ' partial-wrong';
+      } else if (isSelected) cls += ' selected';
+      const dis = revealed[cur] ? ' disabled' : '';
+      html += `<div class="${cls}${dis}" onclick="${revealed[cur] ? '' : 'toggleMS('+i+')'}">`;
+      html += `<div class="ms-check">${isSelected ? '✓' : ''}</div>`;
+      html += `<div class="ms-text">${opt.text}`;
+      if (revealed[cur]) html += `<div class="ms-hint">${opt.hint}</div>`;
+      html += `</div></div>`;
+    });
+  }
+
+  /* Explanation */
+  const expShow = revealed[cur] ? ' show' : '';
+  html += `<div class="explanation${expShow}"><div class="exp-label">💡 Explicación</div>${q.exp}</div>`;
+  html += `</div>`;
+
+  /* Navigation */
+  html += `<div class="q-nav">`;
+  html += `<button class="btn btn-sec" onclick="navQ(-1)" ${cur === 0 ? 'disabled' : ''}>← Anterior</button>`;
+
+  const hasAnswer = q.type === 'multiselect'
+    ? (msSelections[cur] && msSelections[cur].length > 0)
+    : answers[cur] !== undefined;
+
+  if (!revealed[cur] && hasAnswer) {
+    html += `<button class="btn btn-pri" onclick="checkAnswer()">Verificar respuesta</button>`;
+  } else if (!revealed[cur]) {
+    html += `<button class="btn btn-pri" disabled>${q.type==='multiselect' ? 'Selecciona una o más opciones' : 'Selecciona una opción'}</button>`;
+  } else if (cur < total - 1) {
+    html += `<button class="btn btn-pri" onclick="navQ(1)">Siguiente →</button>`;
+  } else {
+    html += `<button class="btn btn-end" onclick="confirmFinish()">Ver resultados</button>`;
+  }
+  html += `</div>`;
+
+  document.getElementById('qMain').innerHTML = html;
+}
+
+function selectMC(i) {
+  if (revealed[cur]) return;
+  answers[cur] = i;
+  renderQuestion(); renderMap();
+}
+
+function selectTF(val) {
+  if (revealed[cur]) return;
+  answers[cur] = val;
+  renderQuestion(); renderMap();
+}
+
+function toggleMS(i) {
+  if (revealed[cur]) return;
+  if (!msSelections[cur]) msSelections[cur] = [];
+  const idx = msSelections[cur].indexOf(i);
+  if (idx === -1) msSelections[cur].push(i);
+  else msSelections[cur].splice(idx, 1);
+  answers[cur] = msSelections[cur].length > 0 ? msSelections[cur] : undefined;
+  renderQuestion(); renderMap();
+}
+
+function checkAnswer() {
+  revealed[cur] = true;
+  /* For multiselect, mark as answered correctly only if perfect */
+  if (quizQ[cur].type === 'multiselect') {
+    const sel = msSelections[cur] || [];
+    const correctIdxs = quizQ[cur].opts.map((o,i) => o.correct ? i : -1).filter(i => i >= 0);
+    const isPerf = sel.length === correctIdxs.length && correctIdxs.every(i => sel.includes(i));
+    answers[cur] = isPerf ? 'correct' : 'partial';
+  }
+  renderQuestion(); renderMap();
+}
+
+function navQ(dir) {
+  const next = cur + dir;
+  if (next >= 0 && next < quizQ.length) { cur = next; renderQuestion(); renderMap(); }
+}
+
+function confirmFinish() {
+  const unanswered = quizQ.filter((_, i) => answers[i] === undefined).length;
+  if (unanswered > 0 && !confirm(`Tienes ${unanswered} pregunta(s) sin responder. ¿Deseas finalizar de todas formas?`)) return;
+  finishQuiz();
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESULTS
+   ══════════════════════════════════════════════════════════ */
+function finishQuiz() {
+  clearInterval(timerInt);
+  let correct = 0, wrong = 0, skipped = 0;
+
+  quizQ.forEach((q, i) => {
+    const a = answers[i];
+    if (a === undefined) { skipped++; return; }
+    let ok = false;
+    if (q.type === 'mc') ok = a === q.ans;
+    else if (q.type === 'tf') ok = a === q.ans;
+    else if (q.type === 'multiselect') ok = a === 'correct';
+    if (ok) correct++; else wrong++;
+  });
+
+  const pct = Math.round((correct / quizQ.length) * 100);
+  const scoreColor = pct >= 70 ? '#38a169' : pct >= 50 ? '#d69e2e' : '#e53e3e';
+  const scoreMsg = pct >= 70 ? '¡Excelente! Estás listo/a para el Cuestionario 2.' : pct >= 50 ? 'Buen avance. Repasa los temas marcados con error.' : 'Necesitas más práctica. Revisa los materiales de estudio.';
+
+  let html = `<div class="results-top">
+    <div style="font-size:0.8rem;color:#718096;margin-bottom:0.3rem;">Resultado final</div>
+    <div class="score-big" style="color:${scoreColor};">${pct}<span style="font-size:2rem;">%</span></div>
+    <div class="score-lbl">${correct} correctas · ${wrong} incorrectas · ${skipped} sin responder</div>
+    <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%;background:${scoreColor};"></div></div>
+    <div style="font-size:0.88rem;color:#4a5568;margin-top:0.7rem;">${scoreMsg}</div>
+    <div class="score-stats">
+      <div class="stat-box"><div class="stat-n" style="color:#276749;">${correct}</div><div class="stat-l">Correctas</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:#c53030;">${wrong}</div><div class="stat-l">Incorrectas</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:#718096;">${skipped}</div><div class="stat-l">Sin responder</div></div>
+    </div>
+    <div class="results-actions">
+      <button class="btn btn-pri" onclick="startQuiz()">Intentar de nuevo (nuevas preguntas)</button>
+      <a class="btn btn-sec" href="english-ga2-guide.html" style="text-decoration:none;display:inline-flex;align-items:center;">← Volver a la guía</a>
+    </div>
+  </div>
+  <div class="review-title">Revisión de respuestas</div>`;
+
+  quizQ.forEach((q, i) => {
+    const a = answers[i];
+    let isCorrect = false;
+    if (q.type === 'mc') isCorrect = a === q.ans;
+    else if (q.type === 'tf') isCorrect = a === q.ans;
+    else if (q.type === 'multiselect') isCorrect = a === 'correct';
+
+    const cls = a === undefined ? 'skip' : isCorrect ? 'ok' : 'bad';
+    const icon = a === undefined ? '⬜' : isCorrect ? '✅' : '❌';
+
+    let displayQ = q.type === 'mc' && q.cat === 'scramble'
+      ? q.q.replace(/ \/ /g, ' / ')
+      : q.type === 'mc' ? q.q.replace(/________/g, '___')
+      : q.q;
+
+    let answerLine = '';
+    if (q.type === 'mc') {
+      const letters = ['a','b','c','d'];
+      const correctText = `<span style="color:#276749;font-weight:600;">${letters[q.ans]}. ${q.opts[q.ans]}</span>`;
+      if (a === undefined) answerLine = `<div class="review-ans">Sin responder · Correcta: ${correctText}</div>`;
+      else if (isCorrect) answerLine = `<div class="review-ans" style="color:#276749;">Tu respuesta: ${letters[a]}. ${q.opts[a]} ✓</div>`;
+      else answerLine = `<div class="review-ans"><span style="color:#c53030;">Tu respuesta: ${letters[a]}. ${q.opts[a]} ✗</span> · Correcta: ${correctText}</div>`;
+    } else if (q.type === 'tf') {
+      const correctText = `<span style="color:#276749;font-weight:600;">${q.ans ? 'Verdadero' : 'Falso'}</span>`;
+      if (a === undefined) answerLine = `<div class="review-ans">Sin responder · Correcta: ${correctText}</div>`;
+      else if (isCorrect) answerLine = `<div class="review-ans" style="color:#276749;">Tu respuesta: ${a ? 'Verdadero' : 'Falso'} ✓</div>`;
+      else answerLine = `<div class="review-ans"><span style="color:#c53030;">Tu respuesta: ${a ? 'Verdadero' : 'Falso'} ✗</span> · Correcta: ${correctText}</div>`;
+    } else if (q.type === 'multiselect') {
+      const correctOpts = q.opts.filter(o => o.correct).map(o => o.text).join('; ');
+      if (a === undefined) answerLine = `<div class="review-ans">Sin responder · Correctas: <span style="color:#276749;font-weight:600;">${correctOpts}</span></div>`;
+      else if (isCorrect) answerLine = `<div class="review-ans" style="color:#276749;">Selección perfecta ✓</div>`;
+      else answerLine = `<div class="review-ans"><span style="color:#c53030;">Selección incorrecta o incompleta ✗</span> · Correctas: <span style="color:#276749;font-weight:600;">${correctOpts}</span></div>`;
+    }
+
+    html += `<div class="review-item ${cls}">
+      <div class="review-qtext">${icon} <strong>P${i+1}.</strong> ${displayQ}</div>
+      ${answerLine}
+      <div class="review-exp">💡 ${q.exp}</div>
+    </div>`;
+  });
+
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  document.getElementById('resultsWrap').innerHTML = html;
+}
+</script>
+</body>
+</html>
