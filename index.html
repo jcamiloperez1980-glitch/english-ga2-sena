@@ -1,1 +1,899 @@
-﻿<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=english-ga2-guide.html"><title>Inglés GA2 SENA</title></head><body><a href="english-ga2-guide.html">Ir a la guía →</a></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inglés GA2 — SENA 240202501</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;color:#1a202c;line-height:1.65;font-size:15px;}
+a{color:#1a6a2a;text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* ── Header ── */
+.app-header{background:linear-gradient(135deg,#39a900 0%,#2d8500 100%);color:white;padding:1.5rem 2rem 1.2rem;}
+.app-header h1{font-size:1.35rem;font-weight:700;letter-spacing:-0.2px;}
+.app-header .subtitle{opacity:0.88;font-size:0.85rem;margin-top:0.2rem;}
+.progress-row{display:flex;align-items:center;gap:1rem;margin-top:1rem;}
+.progress-track{flex:1;background:rgba(255,255,255,0.25);border-radius:20px;height:6px;}
+.progress-fill{background:white;border-radius:20px;height:6px;width:0%;transition:width 0.4s;}
+.progress-label{font-size:0.8rem;opacity:0.9;white-space:nowrap;}
+
+/* ── Tabs ── */
+.tabs-nav{background:white;border-bottom:2px solid #e2e8f0;padding:0 1.5rem;display:flex;gap:0;overflow-x:auto;scrollbar-width:none;}
+.tabs-nav::-webkit-scrollbar{display:none;}
+.tab-btn{background:none;border:none;border-bottom:3px solid transparent;padding:0.85rem 1rem;font-size:0.82rem;font-weight:500;color:#718096;cursor:pointer;white-space:nowrap;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tab-btn:hover{color:#39a900;background:#f0faf0;}
+.tab-btn.active{color:#2d8500;border-bottom-color:#39a900;background:#f6fff2;}
+.tab-btn .tab-code{font-size:0.7rem;opacity:0.7;font-weight:400;}
+.tab-btn .tab-dates{font-size:0.7rem;margin-top:1px;}
+.tab-btn .status-dot{width:6px;height:6px;border-radius:50%;margin:0 auto;}
+.dot-upcoming{background:#3182ce;}
+.dot-soon{background:#d69e2e;}
+.dot-active{background:#38a169;}
+.dot-quiz{background:#805ad5;}
+
+/* ── Main content ── */
+.panels{padding:1.5rem 1.5rem 2rem;}
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* ── Activity header card ── */
+.act-header{background:white;border-radius:12px;border:1px solid #e2e8f0;padding:1.4rem 1.6rem;margin-bottom:1rem;}
+.act-meta{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;flex-wrap:wrap;}
+.act-code{font-size:0.72rem;background:#f0faf0;color:#276749;border:1px solid #c6f6d5;border-radius:6px;padding:2px 8px;font-weight:500;}
+.act-title{font-size:1.3rem;font-weight:700;color:#1a202c;margin-bottom:0.3rem;}
+.act-date{display:inline-flex;align-items:center;gap:5px;font-size:0.82rem;color:#4a5568;background:#f7fafc;border:1px solid #e2e8f0;border-radius:6px;padding:3px 10px;}
+.badge{font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:20px;}
+.badge-blue{background:#ebf8ff;color:#2b6cb0;border:1px solid #bee3f8;}
+.badge-green{background:#f0fff4;color:#276749;border:1px solid #c6f6d5;}
+.badge-amber{background:#fffbeb;color:#92400e;border:1px solid #fde68a;}
+.badge-purple{background:#faf5ff;color:#553c9a;border:1px solid #d6bcfa;}
+.badge-red{background:#fff5f5;color:#c53030;border:1px solid #fed7d7;}
+
+.countdown{font-size:0.78rem;font-weight:600;color:#c05621;background:#fffaf0;border:1px solid #fbd38d;border-radius:6px;padding:3px 10px;}
+
+/* ── Grid layout ── */
+.content-grid{display:grid;grid-template-columns:1fr 320px;gap:1rem;}
+@media(max-width:780px){.content-grid{grid-template-columns:1fr;}}
+
+/* ── Cards ── */
+.card{background:white;border-radius:12px;border:1px solid #e2e8f0;padding:1.2rem 1.4rem;margin-bottom:1rem;}
+.card-title{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#718096;margin-bottom:0.9rem;display:flex;align-items:center;gap:6px;}
+.card-title svg{flex-shrink:0;}
+
+/* ── Objective box ── */
+.objective{background:#f6fff2;border:1px solid #c6f6d5;border-left:4px solid #39a900;border-radius:0 10px 10px 0;padding:1rem 1.2rem;margin-bottom:1rem;font-size:0.9rem;color:#22543d;}
+
+/* ── Steps ── */
+.steps{counter-reset:step;}
+.step{display:flex;gap:10px;margin-bottom:0.85rem;align-items:flex-start;}
+.step-num{min-width:24px;height:24px;background:#39a900;color:white;border-radius:50%;font-size:0.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-content{font-size:0.88rem;color:#2d3748;}
+.step-content strong{color:#1a202c;}
+
+/* ── Checklist ── */
+.checklist{list-style:none;}
+.checklist li{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:0.88rem;border-bottom:1px solid #f7fafc;}
+.checklist li:last-child{border:none;}
+.check-icon{color:#39a900;font-size:1.1rem;flex-shrink:0;line-height:1.4;}
+.req-label{font-weight:600;color:#2d3748;font-size:0.78rem;margin-right:3px;}
+
+/* ── Vocab / phrases ── */
+.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.vocab-item{background:#f7fafc;border-radius:8px;padding:6px 10px;font-size:0.82rem;}
+.vocab-en{font-weight:600;color:#1a202c;}
+.vocab-es{color:#718096;font-size:0.75rem;}
+
+/* ── Sample text ── */
+.sample-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:1rem;font-size:0.85rem;color:#44337a;font-style:italic;line-height:1.6;}
+.sample-box em{font-style:normal;color:#744210;font-weight:600;}
+
+/* ── Interview questions ── */
+.q-list{list-style:none;}
+.q-item{background:#f6fff2;border:1px solid #c6f6d5;border-radius:8px;padding:0.7rem 1rem;margin-bottom:0.5rem;font-size:0.88rem;}
+.q-num{font-weight:700;color:#276749;margin-right:6px;}
+.q-hint{font-size:0.78rem;color:#718096;margin-top:3px;font-style:italic;}
+
+/* ── Links ── */
+.resource-links{display:flex;flex-direction:column;gap:6px;}
+.resource-link{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#fafafa;font-size:0.83rem;transition:background 0.15s;}
+.resource-link:hover{background:#f0faf0;border-color:#c6f6d5;text-decoration:none;}
+.link-icon{font-size:1.1rem;flex-shrink:0;}
+.link-text{color:#2d3748;font-weight:500;}
+.link-desc{color:#718096;font-size:0.75rem;}
+
+/* ── Format requirements ── */
+.format-table{width:100%;font-size:0.83rem;border-collapse:collapse;}
+.format-table tr{border-bottom:1px solid #f0f4f8;}
+.format-table td{padding:5px 4px;}
+.format-table td:first-child{color:#718096;width:90px;}
+.format-table td:last-child{font-weight:500;color:#2d3748;}
+
+/* ── Quiz placeholder ── */
+.quiz-placeholder{background:white;border-radius:12px;border:2px dashed #d6bcfa;padding:3rem 2rem;text-align:center;}
+.quiz-placeholder .ql-icon{font-size:3rem;margin-bottom:0.5rem;}
+.quiz-placeholder h2{color:#553c9a;font-size:1.1rem;margin-bottom:0.5rem;}
+.quiz-placeholder p{color:#718096;font-size:0.88rem;}
+
+/* ── Section divider ── */
+.section-divider{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#a0aec0;margin:1rem 0 0.6rem;display:flex;align-items:center;gap:8px;}
+.section-divider::after{content:'';flex:1;height:1px;background:#e2e8f0;}
+
+/* ── Sidebar ── */
+.sidebar .card{position:sticky;top:1rem;}
+
+/* ── Tips ── */
+.tip{background:#fffbeb;border-radius:8px;padding:0.8rem 1rem;font-size:0.83rem;color:#744210;margin-bottom:0.6rem;}
+.tip strong{display:block;margin-bottom:2px;}
+
+/* ── Timeline widget ── */
+.timeline{list-style:none;padding-left:12px;border-left:2px solid #e2e8f0;}
+.tl-item{position:relative;padding:0 0 1rem 1.2rem;font-size:0.83rem;}
+.tl-item::before{content:'';position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:#39a900;border:2px solid white;box-shadow:0 0 0 2px #39a900;}
+.tl-item.future::before{background:white;border:2px solid #cbd5e0;box-shadow:none;}
+.tl-dates{font-size:0.72rem;color:#718096;display:block;}
+.tl-name{font-weight:500;color:#2d3748;}
+.tl-item.current .tl-name{color:#2d8500;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>📘 Inglés — Guía de aprendizaje 2</h1>
+  <div class="subtitle">GA2-240202501 · SENA · Fase Análisis · Junio–Julio 2026</div>
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 6 actividades</div>
+  </div>
+</div>
+
+<!-- ── Tab navigation ── -->
+<nav class="tabs-nav" role="tablist">
+  <button class="tab-btn active" onclick="showTab(0)" role="tab">
+    <div class="status-dot dot-quiz"></div>
+    Cuestionario 1
+    <span class="tab-code">AA1-EV01</span>
+    <span class="tab-dates">20–21 jun</span>
+  </button>
+  <button class="tab-btn" onclick="showTab(1)" role="tab">
+    <div class="status-dot dot-soon"></div>
+    Video entrevista
+    <span class="tab-code">AA1-EV02</span>
+    <span class="tab-dates">22–23 jun</span>
+  </button>
+  <button class="tab-btn" onclick="showTab(2)" role="tab">
+    <div class="status-dot dot-upcoming"></div>
+    Crónica
+    <span class="tab-code">AA1-EV03</span>
+    <span class="tab-dates">24–25 jun</span>
+  </button>
+  <button class="tab-btn" onclick="showTab(3)" role="tab">
+    <div class="status-dot dot-quiz"></div>
+    Cuestionario 2
+    <span class="tab-code">AA2-EV01</span>
+    <span class="tab-dates">26–27 jun</span>
+  </button>
+  <button class="tab-btn" onclick="showTab(4)" role="tab">
+    <div class="status-dot dot-upcoming"></div>
+    Presentación
+    <span class="tab-code">AA2-EV02</span>
+    <span class="tab-dates">28–29 jun</span>
+  </button>
+  <button class="tab-btn" onclick="showTab(5)" role="tab">
+    <div class="status-dot dot-upcoming"></div>
+    Documento escrito
+    <span class="tab-code">AA2-EV03</span>
+    <span class="tab-dates">30 jun–1 jul</span>
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PANEL 0 — Cuestionario 1 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="panels">
+
+<div class="panel active" id="panel-0">
+  <div class="act-header">
+    <div class="act-meta">
+      <span class="act-code">GA2-240202501-AA1-EV01</span>
+      <span class="badge badge-purple">Cuestionario en línea</span>
+      <span class="countdown" id="cd-0"></span>
+    </div>
+    <div class="act-title">Cuestionario 1 — Nivel 2</div>
+    <div class="act-date">📅 20 de junio – 21 de junio de 2026</div>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <div class="objective">
+        El cuestionario evalúa los contenidos del <strong>nivel 2</strong> del material de estudio. Incluye estructuras para reportar y expresar opiniones sobre situaciones cotidianas y laborales.
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Temas evaluados — Nivel 2
+        </div>
+        <div class="section-divider">Gramática</div>
+        <ul class="checklist">
+          <li><span class="check-icon">▸</span><span><span class="req-label">Reported speech:</span> She said that she was working / He told me he had finished</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Opiniones y acuerdo:</span> I think / I believe / I agree / I disagree / In my opinion…</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Conectores de contraste:</span> however, although, despite, even though, on the other hand</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Verbos modales de obligación:</span> must, have to, should, ought to, need to</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Condicional tipo 2:</span> If I had more time, I would study more</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Vocabulario laboral:</span> aplicar a un empleo, habilidades, perfil profesional</span></li>
+        </ul>
+        <div class="section-divider">Vocabulario clave</div>
+        <div class="vocab-grid">
+          <div class="vocab-item"><div class="vocab-en">to report</div><div class="vocab-es">reportar / informar</div></div>
+          <div class="vocab-item"><div class="vocab-en">to express an opinion</div><div class="vocab-es">expresar una opinión</div></div>
+          <div class="vocab-item"><div class="vocab-en">daily routine</div><div class="vocab-es">rutina diaria</div></div>
+          <div class="vocab-item"><div class="vocab-en">workplace situations</div><div class="vocab-es">situaciones laborales</div></div>
+          <div class="vocab-item"><div class="vocab-en">to claim / to state</div><div class="vocab-es">afirmar / declarar</div></div>
+          <div class="vocab-item"><div class="vocab-en">furthermore / besides</div><div class="vocab-es">además</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💡 Estrategia para el cuestionario</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">Repasa el material de estudio del <strong>nivel 2</strong> completo antes del 20 de junio.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">Practica transformar oraciones directas a <strong>reported speech</strong> (la estructura más evaluada).</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">Haz los ejercicios de práctica que encontrarás en las apps de recursos de esta guía.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content">Ingresa a la plataforma el <strong>20 de junio</strong> con tiempo suficiente (no esperes el último día).</div></div>
+      </div>
+
+      <div class="quiz-placeholder" style="border-color:#c6f6d5;background:#f6fff2;">
+        <div class="ql-icon">🧪</div>
+        <h2 style="color:#276749;">Zona de práctica — Lista</h2>
+        <p style="margin-bottom:1.2rem;">30 preguntas en el banco · 15 aleatorias por intento · Timer de 2 horas</p>
+        <a href="quiz-cuestionario1.html" target="_blank" style="display:inline-block;background:#39a900;color:white;text-decoration:none;padding:0.7rem 2rem;border-radius:10px;font-weight:600;font-size:0.95rem;">Iniciar quiz de práctica →</a>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="card">
+        <div class="card-title">🎓 Recursos de estudio</div>
+        <div class="resource-links">
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=reported+speech+english+exercises" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Reported speech — ejercicios</div><div class="link-desc">YouTube · Buscar videos</div></div>
+          </a>
+          <a class="resource-link" href="https://learnenglish.britishcouncil.org/grammar/b1-b2-grammar/reported-speech-statements-tense-changes" target="_blank">
+            <span class="link-icon">📖</span>
+            <div><div class="link-text">Reported speech — British Council</div><div class="link-desc">Teoría y ejercicios</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=expressing+opinions+english+b1" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Expressing opinions in English</div><div class="link-desc">YouTube · Buscar videos</div></div>
+          </a>
+          <a class="resource-link" href="https://learnenglish.britishcouncil.org/grammar/b1-b2-grammar/modal-verbs-obligation" target="_blank">
+            <span class="link-icon">📖</span>
+            <div><div class="link-text">Modal verbs — must / have to</div><div class="link-desc">British Council</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=second+conditional+english+lesson" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Condicional tipo 2</div><div class="link-desc">YouTube · Buscar videos</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📅 Línea de tiempo del módulo</div>
+        <ul class="timeline">
+          <li class="tl-item current"><span class="tl-dates">20–21 jun</span><span class="tl-name">Cuestionario 1 ← ahora</span></li>
+          <li class="tl-item future"><span class="tl-dates">22–23 jun</span><span class="tl-name">Video entrevista</span></li>
+          <li class="tl-item future"><span class="tl-dates">24–25 jun</span><span class="tl-name">Crónica</span></li>
+          <li class="tl-item future"><span class="tl-dates">26–27 jun</span><span class="tl-name">Cuestionario 2</span></li>
+          <li class="tl-item future"><span class="tl-dates">28–29 jun</span><span class="tl-name">Presentación</span></li>
+          <li class="tl-item future"><span class="tl-dates">30 jun–1 jul</span><span class="tl-name">Documento escrito</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PANEL 1 — Video entrevista virtual -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="panel" id="panel-1">
+  <div class="act-header">
+    <div class="act-meta">
+      <span class="act-code">GA2-240202501-AA1-EV02</span>
+      <span class="badge badge-amber">Video · 3–5 minutos</span>
+      <span class="countdown" id="cd-1"></span>
+    </div>
+    <div class="act-title">Video entrevista virtual de trabajo</div>
+    <div class="act-date">📅 22 de junio – 23 de junio de 2026</div>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <div class="objective">
+        Con un compañero, graben una entrevista de trabajo en inglés. Deben intercambiar roles (entrevistado ↔ entrevistador). Suban el video a <strong>YouTube o Vimeo</strong> y compartan el enlace.
+      </div>
+
+      <div class="card">
+        <div class="card-title">❓ Las 8 preguntas de la entrevista</div>
+        <ol class="q-list">
+          <li class="q-item"><span class="q-num">1.</span><strong>Tell us about yourself.</strong><div class="q-hint">Habla de tu formación, experiencia y por qué eres el candidato ideal.</div></li>
+          <li class="q-item"><span class="q-num">2.</span><strong>What motivates you?</strong><div class="q-hint">¿Qué te impulsa a trabajar bien? Logros, aprendizaje, impacto…</div></li>
+          <li class="q-item"><span class="q-num">3.</span><strong>What are your hobbies?</strong><div class="q-hint">Hobbies que muestren habilidades relevantes (lectura, tecnología, deportes).</div></li>
+          <li class="q-item"><span class="q-num">4.</span><strong>What are your future plans if you get this job?</strong><div class="q-hint">Planes concretos de contribución a la empresa.</div></li>
+          <li class="q-item"><span class="q-num">5.</span><strong>What are your career goals?</strong><div class="q-hint">Objetivos profesionales a mediano plazo.</div></li>
+          <li class="q-item"><span class="q-num">6.</span><strong>What do you see as a major success in your life?</strong><div class="q-hint">Un logro personal o profesional que demuestre tu carácter.</div></li>
+          <li class="q-item"><span class="q-num">7.</span><strong>Why did you leave your last job?</strong><div class="q-hint">Responde de forma positiva, nunca hables mal de un jefe anterior.</div></li>
+          <li class="q-item"><span class="q-num">8.</span><strong>Where do you see yourself in 5 years?</strong><div class="q-hint">Muestra ambición realista y lealtad a la empresa.</div></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎬 Pasos para realizar el video</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">Coordina con tu compañero la fecha y hora del encuentro sincrónico.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">Prepara y practica tus <strong>respuestas a las 8 preguntas</strong> (mínimo 3 ensayos).</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">Configura la reunión en <strong>Zoom, Meet, Teams o Skype</strong> con grabación activada.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content">Graben la entrevista completa: <em>tú como entrevistado</em> + <em>tú como entrevistador</em>.</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content">Sube el video a <strong>YouTube (no listado) o Vimeo</strong> — verifica que el enlace funcione sin restricciones.</div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content">Crea un documento Word/PDF con tus datos básicos y el enlace del video. Entrega en la plataforma SENA.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📝 Plantilla de respuestas — rellena antes del video</div>
+        <div class="sample-box">
+          <em>Q1 — Tell us about yourself:</em><br>
+          "My name is _____. I am a _____ with _____ years of experience in _____. I studied _____ at _____. I am passionate about _____ and I am looking for a position where I can _____."<br><br>
+          <em>Q7 — Why did you leave your last job:</em><br>
+          "I left my previous position because I was looking for new challenges and opportunities to grow professionally. I have great respect for my former employer and I learned a lot there."<br><br>
+          <em>Q8 — Where do you see yourself in 5 years:</em><br>
+          "In five years, I see myself as a key member of this organization, having contributed to _____ and having developed my skills in _____."
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Cómo te van a evaluar — Lista de chequeo SENA</div>
+        <div style="background:#f6fff2;border-left:4px solid #39a900;border-radius:0 8px 8px 0;padding:0.7rem 1rem;margin-bottom:0.9rem;font-size:0.83rem;color:#22543d;border:1px solid #c6f6d5;"><strong>Criterio general:</strong> Comprende información concreta relativa a temas cotidianos y laborales en textos orales y escritos.</div>
+        <div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#c6f6d5;color:#276749;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">30%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El video presenta las características en la postulación para un empleo relacionado con su carrera profesional.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#bee3f8;color:#2b6cb0;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">20%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Se dispone del entrevistador y el entrevistado para dar respuesta a las preguntas orientadoras.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e9d8fd;color:#553c9a;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">15%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Ha asimilado el sistema fonológico del inglés (fonemas, ritmo, entonación) y usa mensajes sencillos y contextualizados.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e9d8fd;color:#553c9a;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">15%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La pronunciación es clara y formula frases de acuerdo con el componente formativo, con uso de planes futuros y pasados.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#fef3c7;color:#92400e;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La entrevista muestra coherencia y cohesión entre los conceptos y el vocabulario utilizado.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Cumple con todos los requisitos de la estructura de la entrevista.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La entrega se realiza en las fechas establecidas por el instructor.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Desarrolla la evidencia según indicaciones y la envía a través de la plataforma virtual de aprendizaje.</span></div>
+        </div>
+        <div style="margin-top:0.8rem;background:#fffbeb;border:1px solid #fbd38d;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.8rem;color:#744210;">💡 Cada indicador es <strong>Sí / No</strong>. Los porcentajes suman 100% — cuantos más cumplas, mayor tu nota.</div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="card">
+        <div class="card-title">✅ Requisitos de entrega</div>
+        <table class="format-table">
+          <tr><td>Duración</td><td>3 a 5 minutos</td></tr>
+          <tr><td>Plataforma</td><td>YouTube o Vimeo</td></tr>
+          <tr><td>Documento</td><td>Word o PDF</td></tr>
+          <tr><td>Contenido doc.</td><td>Datos del entrevistado, entrevistador + URL</td></tr>
+          <tr><td>Roles</td><td>Ambos compañeros deben aparecer en ambos roles</td></tr>
+          <tr><td>Idioma</td><td>Inglés (todo el video)</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">🎓 Recursos de estudio</div>
+        <div class="resource-links">
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=job+interview+questions+and+answers+in+english" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Preguntas de entrevista en inglés</div><div class="link-desc">YouTube · Videos de práctica</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=tell+me+about+yourself+english+interview" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">How to answer: Tell me about yourself</div><div class="link-desc">YouTube · Tips específicos</div></div>
+          </a>
+          <a class="resource-link" href="https://learnenglish.britishcouncil.org/skills/speaking/b1-speaking/job-interview" target="_blank">
+            <span class="link-icon">📖</span>
+            <div><div class="link-text">Job interview — British Council</div><div class="link-desc">Frases y vocabulario clave</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=how+to+record+zoom+meeting+tutorial" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Cómo grabar en Zoom / Meet</div><div class="link-desc">YouTube · Tutorial técnico</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 Frases útiles para el entrevistador</div>
+        <div style="font-size:0.83rem; color:#2d3748;">
+          <p style="margin-bottom:4px;">• "Please, have a seat."</p>
+          <p style="margin-bottom:4px;">• "Thank you for coming today."</p>
+          <p style="margin-bottom:4px;">• "Can you tell me a bit about your background?"</p>
+          <p style="margin-bottom:4px;">• "That's very interesting."</p>
+          <p style="margin-bottom:4px;">• "Do you have any questions for us?"</p>
+          <p>"We'll be in touch. Thank you."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PANEL 2 — Crónica -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="panel" id="panel-2">
+  <div class="act-header">
+    <div class="act-meta">
+      <span class="act-code">GA2-240202501-AA1-EV03</span>
+      <span class="badge badge-blue">Documento escrito · PDF</span>
+      <span class="countdown" id="cd-2"></span>
+    </div>
+    <div class="act-title">Crónica — Personaje icónico</div>
+    <div class="act-date">📅 24 de junio – 25 de junio de 2026</div>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <div class="objective">
+        Selecciona un <strong>personaje icónico</strong> relacionado con tu perfil profesional y escribe una crónica de sus hechos y trayectoria más importantes. Máximo 1 página, entre <strong>200 y 500 palabras</strong>.
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔍 ¿Qué es una crónica en inglés?</div>
+        <p style="font-size:0.88rem; color:#2d3748; margin-bottom:0.8rem;">Una crónica (<em>chronicle</em> o <em>biographical account</em>) narra los eventos más importantes en orden cronológico de la vida de una persona. Se usa el <strong>pasado simple</strong> como tiempo verbal dominante.</p>
+        <div class="vocab-grid">
+          <div class="vocab-item"><div class="vocab-en">was born in</div><div class="vocab-es">nació en</div></div>
+          <div class="vocab-item"><div class="vocab-en">grew up in</div><div class="vocab-es">creció en</div></div>
+          <div class="vocab-item"><div class="vocab-en">graduated from</div><div class="vocab-es">se graduó de</div></div>
+          <div class="vocab-item"><div class="vocab-en">founded / created</div><div class="vocab-es">fundó / creó</div></div>
+          <div class="vocab-item"><div class="vocab-en">became famous for</div><div class="vocab-es">se hizo famoso/a por</div></div>
+          <div class="vocab-item"><div class="vocab-en">achieved / accomplished</div><div class="vocab-es">logró / alcanzó</div></div>
+          <div class="vocab-item"><div class="vocab-en">contributed to</div><div class="vocab-es">contribuyó a</div></div>
+          <div class="vocab-item"><div class="vocab-en">passed away / retired</div><div class="vocab-es">falleció / se retiró</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📋 Estructura sugerida de la crónica</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Introducción (1 párrafo):</strong> ¿Quién es? ¿Por qué es icónico/a en tu campo profesional?</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Infancia y formación (1 párrafo):</strong> Dónde nació, dónde estudió, primeras influencias.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Trayectoria profesional (2 párrafos):</strong> Principales logros, hitos, proyectos, reconocimientos.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Legado e impacto (1 párrafo):</strong> ¿Qué dejó al mundo? ¿Por qué es recordado/a?</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✍️ Ejemplo de apertura según perfil</div>
+        <div class="sample-box">
+          <em>Perfil tecnológico / ingeniería:</em><br>
+          "Steve Jobs was one of the most visionary entrepreneurs of the 20th century. Born in San Francisco in 1955, he co-founded Apple Inc. and transformed the way people interact with technology…"<br><br>
+          <em>Perfil diseño / moda:</em><br>
+          "Coco Chanel revolutionized women's fashion in the early 1900s. Born in Saumur, France in 1883, she rose from humble beginnings to become one of the most influential designers in history…"<br><br>
+          <em>Perfil administración / negocios:</em><br>
+          "Warren Buffett is widely regarded as the greatest investor of all time. Born in Omaha, Nebraska in 1930, he began his entrepreneurial journey at the age of eleven…"
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="card">
+        <div class="card-title">✅ Requisitos de entrega</div>
+        <table class="format-table">
+          <tr><td>Palabras</td><td>200 – 500 palabras</td></tr>
+          <tr><td>Extensión</td><td>Máximo 1 página</td></tr>
+          <tr><td>Fuente</td><td>Arial, tamaño 12</td></tr>
+          <tr><td>Interlineado</td><td>1,5 líneas</td></tr>
+          <tr><td>Formato</td><td>Word → exportar a PDF</td></tr>
+          <tr><td>Idioma</td><td>Inglés</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">🎓 Recursos de estudio</div>
+        <div class="resource-links">
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=past+simple+tense+english+lesson" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Past simple — lección completa</div><div class="link-desc">YouTube · Tiempo verbal clave</div></div>
+          </a>
+          <a class="resource-link" href="https://learnenglish.britishcouncil.org/grammar/b1-b2-grammar/past-simple" target="_blank">
+            <span class="link-icon">📖</span>
+            <div><div class="link-text">Past simple — British Council</div><div class="link-desc">Teoría y ejercicios</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=how+to+write+a+biography+in+english" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">How to write a biography</div><div class="link-desc">YouTube · Estructura y ejemplos</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=biography+vocabulary+english+linking+words" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Linking words for biographies</div><div class="link-desc">YouTube · Cohesión textual</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 Tip de gramática</div>
+        <div class="tip"><strong>Conectores cronológicos útiles:</strong> first, then, later, after that, eventually, finally, as a result, by the time, during, at that time.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Cómo te van a evaluar — Lista de chequeo SENA</div>
+        <div style="background:#f6fff2;border-left:4px solid #39a900;border-radius:0 8px 8px 0;padding:0.7rem 1rem;margin-bottom:0.9rem;font-size:0.83rem;color:#22543d;border:1px solid #c6f6d5;"><strong>Criterio general:</strong> Produce textos escritos en inglés sobre temas de su perfil profesional con coherencia, precisión gramatical y uso del pasado simple.</div>
+        <div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#c6f6d5;color:#276749;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">30%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El documento presenta la crónica de un personaje icónico relacionado con el perfil profesional del aprendiz.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#bee3f8;color:#2b6cb0;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">20%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El texto usa correctamente el pasado simple (past simple) como tiempo verbal dominante de la narración.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e9d8fd;color:#553c9a;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">15%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El vocabulario es apropiado y variado, con uso de conectores cronológicos (first, then, later, finally…).</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e9d8fd;color:#553c9a;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">15%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La crónica tiene coherencia y cohesión entre párrafos (introducción, trayectoria, legado/cierre).</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#fef3c7;color:#92400e;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La ortografía y puntuación en inglés son correctas a lo largo del documento.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Cumple con todos los requisitos de formato (Arial 12, 1,5 líneas, 200–500 palabras, exportado a PDF).</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La entrega se realiza en las fechas establecidas por el instructor.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Desarrolla la evidencia según indicaciones y la envía a través de la plataforma virtual de aprendizaje.</span></div>
+        </div>
+        <div style="margin-top:0.8rem;background:#fffbeb;border:1px solid #fbd38d;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.8rem;color:#744210;">💡 Cada indicador es <strong>Sí / No</strong>. Los porcentajes suman 100% — cuantos más cumplas, mayor tu nota.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PANEL 3 — Cuestionario 2 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="panel" id="panel-3">
+  <div class="act-header">
+    <div class="act-meta">
+      <span class="act-code">GA2-240202501-AA2-EV01</span>
+      <span class="badge badge-purple">Cuestionario en línea</span>
+      <span class="countdown" id="cd-3"></span>
+    </div>
+    <div class="act-title">Cuestionario 2 — Nivel 3</div>
+    <div class="act-date">📅 26 de junio – 27 de junio de 2026</div>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <div class="objective">
+        El cuestionario evalúa los contenidos del <strong>nivel 3</strong> del material de estudio. Incluye estructuras para describir lugares turísticos, usar comparativos y superlativos, y vocabulario de turismo y geografía.
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Temas evaluados — Nivel 3
+        </div>
+        <div class="section-divider">Gramática</div>
+        <ul class="checklist">
+          <li><span class="check-icon">▸</span><span><span class="req-label">Comparativos:</span> bigger than, more beautiful than, less crowded than</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Superlativos:</span> the most visited, the tallest, the best-known</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Present perfect:</span> I have visited / It has become a popular destination</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Descripción con "there is / there are":</span> There are mountains, rivers and colonial buildings</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Adjetivos descriptivos:</span> breathtaking, vibrant, peaceful, historic, magnificent</span></li>
+          <li><span class="check-icon">▸</span><span><span class="req-label">Vocabulary turismo:</span> tourist attraction, landmark, heritage site, scenery</span></li>
+        </ul>
+        <div class="section-divider">Vocabulario clave</div>
+        <div class="vocab-grid">
+          <div class="vocab-item"><div class="vocab-en">breathtaking</div><div class="vocab-es">impresionante</div></div>
+          <div class="vocab-item"><div class="vocab-en">vibrant / lively</div><div class="vocab-es">animado / lleno de vida</div></div>
+          <div class="vocab-item"><div class="vocab-en">heritage site</div><div class="vocab-es">patrimonio histórico</div></div>
+          <div class="vocab-item"><div class="vocab-en">surrounding area</div><div class="vocab-es">área circundante</div></div>
+          <div class="vocab-item"><div class="vocab-en">it is located in</div><div class="vocab-es">se encuentra en</div></div>
+          <div class="vocab-item"><div class="vocab-en">it is known for</div><div class="vocab-es">es conocido/a por</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💡 Estrategia para el cuestionario</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">Repasa el material de <strong>nivel 3</strong> (comparativos, superlativos, present perfect).</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">Practica con los recursos de la columna lateral antes del 26 de junio.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">Usa la presentación (AA2-EV02) como práctica: el vocabulario es exactamente el mismo.</div></div>
+      </div>
+
+      <div class="quiz-placeholder" style="border-color:#c6f6d5;background:#f6fff2;">
+        <div class="ql-icon">🧪</div>
+        <h2 style="color:#276749;">Zona de práctica — Lista</h2>
+        <p style="margin-bottom:1.2rem;">30 preguntas en el banco · 15 aleatorias por intento · Timer de 2 horas</p>
+        <a href="quiz-cuestionario2.html" target="_blank" style="display:inline-block;background:#39a900;color:white;text-decoration:none;padding:0.7rem 2rem;border-radius:10px;font-weight:600;font-size:0.95rem;">Iniciar quiz de práctica →</a>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="card">
+        <div class="card-title">🎓 Recursos de estudio</div>
+        <div class="resource-links">
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=comparatives+and+superlatives+english+lesson" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Comparativos y superlativos</div><div class="link-desc">YouTube · Lección completa</div></div>
+          </a>
+          <a class="resource-link" href="https://learnenglish.britishcouncil.org/grammar/b1-b2-grammar/comparatives-and-superlatives" target="_blank">
+            <span class="link-icon">📖</span>
+            <div><div class="link-text">Comparatives — British Council</div><div class="link-desc">Teoría y ejercicios</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=present+perfect+english+exercises+b1" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Present perfect — práctica</div><div class="link-desc">YouTube</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=describing+places+in+english+vocabulary" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Describing places — vocabulario</div><div class="link-desc">YouTube</div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PANEL 4 — Presentación lugar turístico -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="panel" id="panel-4">
+  <div class="act-header">
+    <div class="act-meta">
+      <span class="act-code">GA2-240202501-AA2-EV02</span>
+      <span class="badge badge-green">Video + diapositivas · 2–5 min</span>
+      <span class="countdown" id="cd-4"></span>
+    </div>
+    <div class="act-title">Presentación — Lugar turístico de tu región</div>
+    <div class="act-date">📅 28 de junio – 29 de junio de 2026</div>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <div class="objective">
+        Crea un video presentando un lugar turístico de tu región. Debes aparecer en cámara web y mostrar entre <strong>3 y 5 diapositivas</strong>. Habla completamente en inglés. Sube el video a <strong>YouTube o Vimeo</strong>.
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Estructura de las diapositivas</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Portada:</strong> Tu nombre, nombre del curso, instructor, nombre de la actividad y foto del lugar.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><strong>¿Dónde está?</strong> Ubicación: departamento, distancia de ciudades cercanas, cómo llegar. (<em>It is located in… / It is about X km from…</em>)</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><strong>¿Cómo es?</strong> Adjetivos, comparativos y colores. (<em>It is bigger than… / It is one of the most… / It has a beautiful…</em>)</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><strong>¿Qué hay en ese lugar?</strong> Elementos naturales o arquitectónicos: <em>There are mountains, colonial buildings, a river, waterfalls…</em></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Descripción detallada + Sensaciones + Opinión personal:</strong> ¿Qué emociones transmite? ¿Por qué lo elegiste?</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎬 Grabación del video — paso a paso</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">Crea las diapositivas en <strong>PowerPoint, Prezi o Emaze</strong> con imágenes de buena calidad del lugar.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">Practica la presentación oral varias veces hasta sentirte seguro/a.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">Usa una herramienta de grabación de pantalla + cámara web: <strong>Loom</strong> (recomendado), Screencast-o-Matic, Camtasia, o X Recorder (móvil).</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content">Graba mostrando las diapositivas y tu cámara web al mismo tiempo.</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content">Sube el video a <strong>YouTube (no listado) o Vimeo</strong> y verifica que el enlace sea público.</div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content">Crea un Word/PDF con tus datos y la URL del video. Entrega en la plataforma.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🗺️ Frases modelo para la presentación</div>
+        <div class="sample-box">
+          <em>Ubicación:</em> "Today I'm going to talk about _____, a wonderful place located in the department of _____, Colombia. It is about _____ kilometers from Medellín / Bogotá."<br><br>
+          <em>Descripción:</em> "This place is known for its breathtaking landscapes. It has lush green mountains, crystal-clear rivers, and a warm, welcoming atmosphere. The weather is _____ compared to bigger cities."<br><br>
+          <em>Elementos:</em> "There are several historic churches, colorful houses, and a beautiful central park. You can also find local markets with traditional products."<br><br>
+          <em>Sensaciones y opinión:</em> "When you visit this place, you feel peaceful and connected with nature. I chose this place because it represents the rich cultural heritage of my region and it fills me with pride."
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="card">
+        <div class="card-title">✅ Requisitos de entrega</div>
+        <table class="format-table">
+          <tr><td>Duración</td><td>2 a 5 minutos</td></tr>
+          <tr><td>Diapositivas</td><td>3 a 5 (ver estructura)</td></tr>
+          <tr><td>Plataforma</td><td>YouTube o Vimeo</td></tr>
+          <tr><td>Documento</td><td>Word o PDF con URL</td></tr>
+          <tr><td>Cámara</td><td>Encendida durante todo el video</td></tr>
+          <tr><td>Idioma</td><td>Inglés (presentación oral)</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">🎓 Recursos de estudio</div>
+        <div class="resource-links">
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=how+to+describe+a+place+in+english" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Cómo describir un lugar</div><div class="link-desc">YouTube · Vocabulario y frases</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=adjectives+to+describe+places+english" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Adjetivos para lugares</div><div class="link-desc">YouTube</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=loom+tutorial+screen+recording+webcam" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Tutorial Loom — pantalla + cámara</div><div class="link-desc">YouTube · Herramienta gratuita</div></div>
+          </a>
+          <a class="resource-link" href="https://www.loom.com" target="_blank">
+            <span class="link-icon">🎥</span>
+            <div><div class="link-text">Loom.com — grabar pantalla</div><div class="link-desc">Herramienta gratuita recomendada</div></div>
+          </a>
+          <a class="resource-link" href="https://learnenglish.britishcouncil.org/skills/speaking/b1-speaking/describing-a-place" target="_blank">
+            <span class="link-icon">📖</span>
+            <div><div class="link-text">Describing a place — British Council</div><div class="link-desc">Ejercicios de pronunciación</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Cómo te van a evaluar — Lista de chequeo SENA</div>
+        <div style="background:#f6fff2;border-left:4px solid #39a900;border-radius:0 8px 8px 0;padding:0.7rem 1rem;margin-bottom:0.9rem;font-size:0.83rem;color:#22543d;border:1px solid #c6f6d5;"><strong>Criterio general:</strong> Produce textos orales y escritos sobre lugares y situaciones cotidianas usando comparativos, superlativos y vocabulario descriptivo.</div>
+        <div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#c6f6d5;color:#276749;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">30%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El video presenta un lugar turístico de la región con las características solicitadas: ubicación, descripción, elementos, sensaciones y opinión personal.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#bee3f8;color:#2b6cb0;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">20%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El aprendiz aparece en cámara web durante toda la presentación y la desarrolla completamente en inglés.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e9d8fd;color:#553c9a;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">15%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El vocabulario incluye comparativos, superlativos y adjetivos descriptivos apropiados para el tema.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e9d8fd;color:#553c9a;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">15%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La pronunciación es clara y la presentación oral tiene una duración entre 2 y 5 minutos.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#fef3c7;color:#92400e;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Las diapositivas (entre 3 y 5) están bien organizadas y apoyan visualmente el discurso oral.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Cumple con los requisitos de entrega: URL de YouTube o Vimeo pública y Word/PDF con los datos personales.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La entrega se realiza en las fechas establecidas por el instructor.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Desarrolla la evidencia según indicaciones y la envía a través de la plataforma virtual de aprendizaje.</span></div>
+        </div>
+        <div style="margin-top:0.8rem;background:#fffbeb;border:1px solid #fbd38d;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.8rem;color:#744210;">💡 Cada indicador es <strong>Sí / No</strong>. Los porcentajes suman 100% — cuantos más cumplas, mayor tu nota.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PANEL 5 — Documento escrito (email) -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="panel" id="panel-5">
+  <div class="act-header">
+    <div class="act-meta">
+      <span class="act-code">GA2-240202501-AA2-EV03</span>
+      <span class="badge badge-blue">Correo electrónico formal · PDF</span>
+      <span class="countdown" id="cd-5"></span>
+    </div>
+    <div class="act-title">Documento escrito — Correo de postulación a empleo</div>
+    <div class="act-date">📅 30 de junio – 1 de julio de 2026</div>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <div class="objective">
+        Escribe un correo electrónico formal en inglés postulándote a un empleo relacionado con tu perfil profesional. Aplica las reglas de <strong>netiqueta</strong> y las estructuras del nivel 3. Entre <strong>200 y 400 palabras</strong>.
+      </div>
+
+      <div class="card">
+        <div class="card-title">📧 Estructura obligatoria del correo</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Asunto (Subject):</strong> Describe la idea general del mensaje. Ej: <em>"Application for Software Developer Position — Juan Pérez"</em></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Saludo formal:</strong> <em>Dear Mr./Ms. [Apellido] / Dear Hiring Manager / To Whom It May Concern,</em></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Cuerpo — introducción:</strong> Menciona la palabra <strong>"solicitud"</strong> y el cargo: <em>"I am writing to express my interest in the position of _____ at your organization."</em></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Cuerpo — desarrollo:</strong> Incluye propósito, habilidades relevantes, lo que ofreces a la empresa, y datos de contacto.</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Despedida formal:</strong> <em>Yours sincerely, / Yours faithfully, / Best regards,</em></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content"><strong>Datos del remitente:</strong> Nombre completo, lugar de origen, profesión / programa de formación.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✍️ Plantilla completa del correo</div>
+        <div class="sample-box" style="font-style:normal; font-size:0.82rem; line-height:1.7;">
+          <em style="color:#276749; font-style:normal;">Subject: Application for [Job Position] — [Your Full Name]</em><br><br>
+          <em style="color:#276749; font-style:normal;">Dear Hiring Manager,</em><br><br>
+          I am writing to <strong>formally apply</strong> for the position of <strong>[Job Title]</strong> at [Company Name]. I learned about this opportunity through [source], and I am confident that my skills and background make me an excellent candidate for this role.<br><br>
+          I am a [your profession/program] with [X] years of experience in [field]. My core competencies include [skill 1], [skill 2], and [skill 3], which are directly relevant to this position. I am also proficient in [tool/language/technology].<br><br>
+          I would bring to your organization [what you offer: dedication, creativity, problem-solving skills, etc.]. I am a quick learner, a team player, and I am highly motivated to contribute to the growth of [Company Name].<br><br>
+          I would welcome the opportunity to discuss how my experience aligns with your needs. Please feel free to contact me at [email] or [phone number].<br><br>
+          Thank you for your time and consideration.<br><br>
+          <em style="color:#276749; font-style:normal;">Yours sincerely,</em><br>
+          <em style="color:#276749; font-style:normal;">[Full Name]</em><br>
+          <em style="color:#276749; font-style:normal;">[City, Colombia] · [Profession/Program] · [Institution]</em>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🌐 Reglas de Netiqueta a aplicar</div>
+        <ul class="checklist">
+          <li><span class="check-icon">✓</span><span>Asunto claro y específico (no vago como "Hi" o "Job")</span></li>
+          <li><span class="check-icon">✓</span><span>Saludo formal con apellido del destinatario o cargo</span></li>
+          <li><span class="check-icon">✓</span><span>Párrafos cortos y bien organizados</span></li>
+          <li><span class="check-icon">✓</span><span>Evitar mayúsculas SOSTENIDAS (connotación agresiva)</span></li>
+          <li><span class="check-icon">✓</span><span>Tono profesional y cortés en todo el correo</span></li>
+          <li><span class="check-icon">✓</span><span>Firma con datos de contacto al final</span></li>
+          <li><span class="check-icon">✓</span><span>Revisar ortografía y gramática antes de enviar</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="card">
+        <div class="card-title">✅ Requisitos de entrega</div>
+        <table class="format-table">
+          <tr><td>Palabras</td><td>200 – 400 palabras</td></tr>
+          <tr><td>Extensión</td><td>1 a 3 páginas</td></tr>
+          <tr><td>Fuente</td><td>Arial, tamaño 12</td></tr>
+          <tr><td>Interlineado</td><td>1,5 líneas</td></tr>
+          <tr><td>Formato</td><td>Word → exportar a PDF</td></tr>
+          <tr><td>Idioma</td><td>Inglés (todo el documento)</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">🎓 Recursos de estudio</div>
+        <div class="resource-links">
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=how+to+write+a+job+application+email+in+english" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Job application email en inglés</div><div class="link-desc">YouTube · Ejemplos y estructura</div></div>
+          </a>
+          <a class="resource-link" href="https://learnenglish.britishcouncil.org/skills/writing/b2-writing/job-application-letter" target="_blank">
+            <span class="link-icon">📖</span>
+            <div><div class="link-text">Job application letter — British Council</div><div class="link-desc">Modelo oficial</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=formal+email+writing+english+tips" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Formal email writing tips</div><div class="link-desc">YouTube</div></div>
+          </a>
+          <a class="resource-link" href="https://www.youtube.com/results?search_query=netiquette+professional+email+english" target="_blank">
+            <span class="link-icon">▶</span>
+            <div><div class="link-text">Netiqueta en inglés</div><div class="link-desc">YouTube · Correo profesional</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 Vocabulario de habilidades</div>
+        <div class="vocab-grid">
+          <div class="vocab-item"><div class="vocab-en">team player</div><div class="vocab-es">trabajo en equipo</div></div>
+          <div class="vocab-item"><div class="vocab-en">problem-solver</div><div class="vocab-es">resolutivo/a</div></div>
+          <div class="vocab-item"><div class="vocab-en">detail-oriented</div><div class="vocab-es">orientado al detalle</div></div>
+          <div class="vocab-item"><div class="vocab-en">self-motivated</div><div class="vocab-es">automotivado/a</div></div>
+          <div class="vocab-item"><div class="vocab-en">strong communicator</div><div class="vocab-es">buen comunicador/a</div></div>
+          <div class="vocab-item"><div class="vocab-en">adaptable</div><div class="vocab-es">adaptable</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Cómo te van a evaluar — Lista de chequeo SENA</div>
+        <div style="background:#f6fff2;border-left:4px solid #39a900;border-radius:0 8px 8px 0;padding:0.7rem 1rem;margin-bottom:0.9rem;font-size:0.83rem;color:#22543d;border:1px solid #c6f6d5;"><strong>Criterio general:</strong> Produce textos escritos formales en inglés aplicando normas de netiqueta y estructuras de comunicación laboral.</div>
+        <div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#c6f6d5;color:#276749;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">30%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El correo presenta correctamente una solicitud de empleo relacionada con el perfil profesional del aprendiz.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#bee3f8;color:#2b6cb0;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">20%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Aplica las reglas de netiqueta: asunto claro, saludo formal, tono profesional y despedida adecuada.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e9d8fd;color:#553c9a;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">15%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El vocabulario es formal y apropiado para una comunicación laboral en inglés (habilidades, logros, intención).</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e9d8fd;color:#553c9a;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">15%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La gramática es correcta: uso apropiado del presente, estructuras de solicitud formal y datos de contacto.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#fef3c7;color:#92400e;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">El correo tiene coherencia y cohesión entre párrafos (introducción, desarrollo, cierre con despedida).</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Cumple con los requisitos de formato (Arial 12, interlineado 1,5, entre 200 y 400 palabras, exportado a PDF).</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f7fafc;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">La entrega se realiza en las fechas establecidas por el instructor.</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;"><span style="min-width:38px;text-align:center;background:#e2e8f0;color:#4a5568;border-radius:5px;padding:2px 5px;font-size:0.72rem;font-weight:700;flex-shrink:0;">5%</span><span style="font-size:0.84rem;color:#2d3748;line-height:1.5;">Desarrolla la evidencia según indicaciones y la envía a través de la plataforma virtual de aprendizaje.</span></div>
+        </div>
+        <div style="margin-top:0.8rem;background:#fffbeb;border:1px solid #fbd38d;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.8rem;color:#744210;">💡 Cada indicador es <strong>Sí / No</strong>. Los porcentajes suman 100% — cuantos más cumplas, mayor tu nota.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /panels -->
+
+<script>
+var DEADLINES = [
+  new Date('2026-06-20T23:59:00'),
+  new Date('2026-06-22T23:59:00'),
+  new Date('2026-06-24T23:59:00'),
+  new Date('2026-06-26T23:59:00'),
+  new Date('2026-06-28T23:59:00'),
+  new Date('2026-06-30T23:59:00')
+];
+
+function showTab(idx) {
+  document.querySelectorAll('.panel').forEach(function(p,i){
+    p.classList.toggle('active', i===idx);
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(b,i){
+    b.classList.toggle('active', i===idx);
+  });
+}
+
+function updateCountdowns() {
+  var now = new Date();
+  DEADLINES.forEach(function(dl, i) {
+    var el = document.getElementById('cd-'+i);
+    if (!el) return;
+    var diff = dl - now;
+    if (diff <= 0) {
+      el.textContent = 'Vencido';
+      el.style.background = '#fff5f5';
+      el.style.color = '#c53030';
+      el.style.borderColor = '#fed7d7';
+      return;
+    }
+    var days = Math.floor(diff / 86400000);
+    var hrs  = Math.floor((diff % 86400000) / 3600000);
+    if (days > 0) el.textContent = 'Faltan ' + days + ' día' + (days>1?'s':'');
+    else el.textContent = 'Faltan ' + hrs + ' hora' + (hrs!==1?'s':'');
+    if (days <= 1) {
+      el.style.background = '#fff5f5';
+      el.style.color = '#c53030';
+      el.style.borderColor = '#fed7d7';
+    }
+  });
+}
+
+updateCountdowns();
+setInterval(updateCountdowns, 60000);
+
+var progressFill = document.getElementById('progressFill');
+var progressLabel = document.getElementById('progressLabel');
+var completed = 0;
+progressFill.style.width = (completed/6*100) + '%';
+progressLabel.textContent = completed + ' / 6 actividades';
+</script>
+</body>
+</html>
