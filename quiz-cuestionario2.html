@@ -355,7 +355,7 @@ function startQuiz() {
   document.getElementById('screen-intro').classList.remove('active');
   document.getElementById('screen-quiz').classList.add('active');
   document.getElementById('screen-results').classList.remove('active');
-  window.scrollTo({top: 0, behavior: 'instant'});
+  document.getElementById('screen-quiz').scrollIntoView({behavior: 'smooth'});
 
   renderMap(); renderQuestion(); startTimer();
 }
