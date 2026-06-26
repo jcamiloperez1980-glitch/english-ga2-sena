@@ -135,6 +135,17 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4f8;min-heigh
 .review-qtext{font-size:0.88rem;color:#2d3748;margin-bottom:0.4rem;white-space:pre-wrap;}
 .review-ans{font-size:0.82rem;margin-bottom:0.3rem;}
 .review-exp{font-size:0.8rem;color:#744210;background:#fffbeb;border-radius:6px;padding:0.4rem 0.7rem;margin-top:0.4rem;}
+
+/* ── Tooltip traducción ── */
+.w-tip{cursor:help;border-bottom:1px dotted #39a900;position:relative;display:inline-block;}
+.w-tip:hover .tip-box{display:block;}
+.tip-box{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:#1a202c;color:#fff;border-radius:8px;padding:7px 11px;min-width:130px;max-width:220px;
+  white-space:nowrap;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,0.3);pointer-events:none;text-align:center;}
+.tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:#1a202c;}
+.tip-es{font-size:0.85rem;font-weight:700;color:#68d391;}
+.tip-pron{font-size:0.75rem;color:#a0aec0;margin-top:2px;}
 </style>
 </head>
 <body>
@@ -396,7 +407,7 @@ function renderQuestion() {
   html += `<div class="q-num-label">Pregunta ${cur + 1} de ${total}${q.type==='tf' ? ' · Comprensión lectora' : ''}</div>`;
 
   if (q.type === 'mc') {
-    const displayQ = q.q.replace(/________/g, '<span class="blank"></span>');
+    const displayQ = wrapWords(q.q.replace(/________/g, '<span class="blank"></span>'));
     html += `<div class="q-text">${displayQ}</div>`;
     html += `<div class="options">`;
     const letters = ['a','b','c','d'];
@@ -407,7 +418,7 @@ function renderQuestion() {
         else if (answers[cur] === i && i !== q.ans) cls += ' wrong';
       } else if (answers[cur] === i) cls += ' selected';
       const dis = revealed[cur] ? 'disabled' : '';
-      html += `<button class="${cls}" onclick="selectMC(${i})" ${dis}><span class="opt-letter">${letters[i]}</span>${opt}</button>`;
+      html += `<button class="${cls}" onclick="selectMC(${i})" ${dis}><span class="opt-letter">${letters[i]}</span>${wrapWords(opt)}</button>`;
     });
     html += `</div>`;
   } else {
@@ -576,6 +587,88 @@ function finishQuiz() {
   document.getElementById('screen-quiz').classList.remove('active');
   document.getElementById('screen-results').classList.add('active');
   document.getElementById('resultsWrap').innerHTML = html;
+}
+
+/* ── Diccionario de traducción + pronunciación ── */
+const dict = {
+  "the":{"es":"el/la/los/las","p":"/ðə/"},"a":{"es":"un/una","p":"/ə/"},"an":{"es":"un/una","p":"/æn/"},
+  "is":{"es":"es/está","p":"/ɪz/"},"are":{"es":"son/están","p":"/ɑːr/"},"was":{"es":"era/estaba","p":"/wɒz/"},
+  "were":{"es":"eran/estaban","p":"/wɜːr/"},"be":{"es":"ser/estar","p":"/biː/"},"been":{"es":"sido/estado","p":"/biːn/"},
+  "have":{"es":"tener/haber","p":"/hæv/"},"has":{"es":"tiene/ha","p":"/hæz/"},"had":{"es":"tuvo/había","p":"/hæd/"},
+  "do":{"es":"hacer","p":"/duː/"},"does":{"es":"hace","p":"/dʌz/"},"did":{"es":"hizo","p":"/dɪd/"},
+  "will":{"es":"(futuro)","p":"/wɪl/"},"would":{"es":"(condicional)","p":"/wʊd/"},
+  "can":{"es":"poder","p":"/kæn/"},"could":{"es":"podría","p":"/kʊd/"},"must":{"es":"deber","p":"/mʌst/"},
+  "should":{"es":"debería","p":"/ʃʊd/"},"may":{"es":"puede que","p":"/meɪ/"},"might":{"es":"podría","p":"/maɪt/"},
+  "if":{"es":"si","p":"/ɪf/"},"when":{"es":"cuando","p":"/wen/"},"while":{"es":"mientras","p":"/waɪl/"},
+  "because":{"es":"porque","p":"/bɪˈkɒz/"},"although":{"es":"aunque","p":"/ɔːlˈðoʊ/"},
+  "and":{"es":"y","p":"/ænd/"},"or":{"es":"o","p":"/ɔːr/"},"but":{"es":"pero","p":"/bʌt/"},
+  "not":{"es":"no","p":"/nɒt/"},"no":{"es":"no","p":"/noʊ/"},"yes":{"es":"sí","p":"/jɛs/"},
+  "i":{"es":"yo","p":"/aɪ/"},"you":{"es":"tú/usted","p":"/juː/"},"he":{"es":"él","p":"/hiː/"},
+  "she":{"es":"ella","p":"/ʃiː/"},"it":{"es":"ello","p":"/ɪt/"},"we":{"es":"nosotros","p":"/wiː/"},
+  "they":{"es":"ellos","p":"/ðeɪ/"},"my":{"es":"mi","p":"/maɪ/"},"your":{"es":"tu/su","p":"/jɔːr/"},
+  "his":{"es":"su (él)","p":"/hɪz/"},"her":{"es":"su (ella)","p":"/hɜːr/"},"their":{"es":"su (ellos)","p":"/ðɛr/"},
+  "this":{"es":"este/esta","p":"/ðɪs/"},"that":{"es":"ese/esa","p":"/ðæt/"},
+  "these":{"es":"estos/estas","p":"/ðiːz/"},"those":{"es":"esos/esas","p":"/ðoʊz/"},
+  "what":{"es":"qué","p":"/wɒt/"},"who":{"es":"quién","p":"/huː/"},"where":{"es":"dónde","p":"/wɛr/"},
+  "how":{"es":"cómo","p":"/haʊ/"},"why":{"es":"por qué","p":"/waɪ/"},
+  "lecture":{"es":"conferencia/clase","p":"/ˈlɛktʃər/"},"boring":{"es":"aburrido","p":"/ˈbɔːrɪŋ/"},
+  "bored":{"es":"aburrido (sentimiento)","p":"/bɔːrd/"},"nearly":{"es":"casi","p":"/ˈnɪərli/"},
+  "asleep":{"es":"dormido","p":"/əˈsliːp/"},"fell":{"es":"cayó/se quedó","p":"/fɛl/"},
+  "fall":{"es":"caer","p":"/fɔːl/"},"watch":{"es":"ver/mirar","p":"/wɒtʃ/"},
+  "watching":{"es":"mirando","p":"/ˈwɒtʃɪŋ/"},"watched":{"es":"miró","p":"/wɒtʃt/"},
+  "knocked":{"es":"tocó/golpeó","p":"/nɒkt/"},"knocking":{"es":"tocando","p":"/ˈnɒkɪŋ/"},
+  "someone":{"es":"alguien","p":"/ˈsʌmwʌn/"},"window":{"es":"ventana","p":"/ˈwɪndoʊ/"},
+  "student":{"es":"estudiante","p":"/ˈstjuːdənt/"},"answer":{"es":"respuesta","p":"/ˈɑːnsər/"},
+  "board":{"es":"tablero","p":"/bɔːrd/"},"correctly":{"es":"correctamente","p":"/kəˈrɛktli/"},
+  "wrote":{"es":"escribió","p":"/roʊt/"},"write":{"es":"escribir","p":"/raɪt/"},
+  "written":{"es":"escrito","p":"/ˈrɪtən/"},"write":{"es":"escribir","p":"/raɪt/"},
+  "lost":{"es":"perdió","p":"/lɒst/"},"losing":{"es":"perdiendo","p":"/ˈluːzɪŋ/"},
+  "wallet":{"es":"billetera","p":"/ˈwɒlɪt/"},"walking":{"es":"caminando","p":"/ˈwɔːkɪŋ/"},
+  "station":{"es":"estación","p":"/ˈsteɪʃən/"},"walked":{"es":"caminó","p":"/wɔːkt/"},
+  "reported":{"es":"reportado","p":"/rɪˈpɔːrtɪd/"},"speech":{"es":"discurso/habla","p":"/spiːtʃ/"},
+  "said":{"es":"dijo","p":"/sɛd/"},"told":{"es":"le dijo","p":"/toʊld/"},
+  "asked":{"es":"preguntó","p":"/ɑːskt/"},"went":{"es":"fue","p":"/wɛnt/"},
+  "go":{"es":"ir","p":"/ɡoʊ/"},"going":{"es":"yendo","p":"/ˈɡoʊɪŋ/"},
+  "come":{"es":"venir","p":"/kʌm/"},"came":{"es":"vino","p":"/keɪm/"},
+  "see":{"es":"ver","p":"/siː/"},"saw":{"es":"vio","p":"/sɔː/"},
+  "think":{"es":"pensar","p":"/θɪŋk/"},"thought":{"es":"pensó","p":"/θɔːt/"},
+  "know":{"es":"saber/conocer","p":"/noʊ/"},"knew":{"es":"sabía","p":"/njuː/"},
+  "get":{"es":"obtener/llegar","p":"/ɡɛt/"},"got":{"es":"obtuvo","p":"/ɡɒt/"},
+  "make":{"es":"hacer","p":"/meɪk/"},"made":{"es":"hizo","p":"/meɪd/"},
+  "take":{"es":"tomar","p":"/teɪk/"},"took":{"es":"tomó","p":"/tʊk/"},
+  "give":{"es":"dar","p":"/ɡɪv/"},"gave":{"es":"dio","p":"/ɡeɪv/"},
+  "work":{"es":"trabajar","p":"/wɜːrk/"},"worked":{"es":"trabajó","p":"/wɜːrkt/"},
+  "working":{"es":"trabajando","p":"/ˈwɜːrkɪŋ/"},"job":{"es":"trabajo/empleo","p":"/dʒɒb/"},
+  "taller":{"es":"más alto","p":"/ˈtɔːlər/"},"tallest":{"es":"el más alto","p":"/ˈtɔːlɪst/"},
+  "more":{"es":"más","p":"/mɔːr/"},"most":{"es":"el más","p":"/moʊst/"},
+  "than":{"es":"que (comparación)","p":"/ðæn/"},"as":{"es":"tan/como","p":"/æz/"},
+  "expensive":{"es":"caro","p":"/ɪkˈspɛnsɪv/"},"cheap":{"es":"barato","p":"/tʃiːp/"},
+  "big":{"es":"grande","p":"/bɪɡ/"},"small":{"es":"pequeño","p":"/smɔːl/"},
+  "good":{"es":"bueno","p":"/ɡʊd/"},"better":{"es":"mejor","p":"/ˈbɛtər/"},
+  "best":{"es":"el mejor","p":"/bɛst/"},"bad":{"es":"malo","p":"/bæd/"},
+  "worse":{"es":"peor","p":"/wɜːrs/"},"worst":{"es":"el peor","p":"/wɜːrst/"},
+  "already":{"es":"ya","p":"/ɔːlˈrɛdi/"},"yet":{"es":"todavía/aún","p":"/jɛt/"},
+  "ever":{"es":"alguna vez","p":"/ˈɛvər/"},"never":{"es":"nunca","p":"/ˈnɛvər/"},
+  "just":{"es":"justo/recién","p":"/dʒʌst/"},"since":{"es":"desde","p":"/sɪns/"},
+  "for":{"es":"por/para","p":"/fɔːr/"},"ago":{"es":"hace (tiempo)","p":"/əˈɡoʊ/"},
+  "before":{"es":"antes","p":"/bɪˈfɔːr/"},"after":{"es":"después","p":"/ˈɑːftər/"},
+  "at":{"es":"en/a","p":"/æt/"},"in":{"es":"en","p":"/ɪn/"},"on":{"es":"en/sobre","p":"/ɒn/"},
+  "floor":{"es":"piso/planta","p":"/flɔːr/"},"restaurant":{"es":"restaurante","p":"/ˈrɛstərɒnt/"},
+  "city":{"es":"ciudad","p":"/ˈsɪti/"},"opinion":{"es":"opinión","p":"/əˈpɪnjən/"},
+  "daily":{"es":"diario","p":"/ˈdeɪli/"},"routine":{"es":"rutina","p":"/ruːˈtiːn/"},
+  "report":{"es":"reportar","p":"/rɪˈpɔːrt/"},"claim":{"es":"afirmar","p":"/kleɪm/"},
+  "express":{"es":"expresar","p":"/ɪkˈsprɛs/"},"situation":{"es":"situación","p":"/ˌsɪtʃuˈeɪʃən/"}
+};
+
+function wrapWords(text) {
+  return text.replace(/([a-zA-Z'-]+)/g, function(word) {
+    const key = word.toLowerCase().replace(/[^a-z'-]/g,'');
+    const d = dict[key];
+    if (!d) return word;
+    return '<span class="w-tip">' + word +
+      '<span class="tip-box"><span class="tip-es">' + d.es + '</span>' +
+      '<div class="tip-pron">' + d.p + '</div></span></span>';
+  });
 }
 </script>
 </body>
